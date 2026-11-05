@@ -1,0 +1,40 @@
+# Virtual environments
+venv/
+backend/venv/
+
+# Node dependencies and build artifacts
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
+
+# Environment configurations and secrets
+.env
+backend/.env
+frontend/.env
+*.env
+!*.env.example
+
+# Python cache and compiled files
+__pycache__/
+*/__pycache__/
+*/*/__pycache__/
+*/*/*/__pycache__/
+*.pyc
+.pytest_cache/
+
+# Media and user uploads
+backend/media/
+media/
+
+# ML outputs and raw data
+backend/forecasting/output/
+output/
+data/raw/
+
+# Sample datasets must stay trackable
+!data/sample_sales.csv
+
+# OS metadata
+.DS_Store
+Thumbs.db

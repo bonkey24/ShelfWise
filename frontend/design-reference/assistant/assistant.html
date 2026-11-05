@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ShelfWise - Retail Intelligence AI Assistant</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Inter Font -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "error-container": "#ffdad6",
+            "on-primary-fixed-variant": "#003ea8",
+            "status-healthy": "#10B981",
+            "secondary-fixed": "#d5e3fd",
+            "surface-dim": "#d2d9f4",
+            "on-error-container": "#93000a",
+            "surface-container-highest": "#dae2fd",
+            "on-secondary": "#ffffff",
+            "surface-container-low": "#f2f3ff",
+            "text-muted": "#64748B",
+            "secondary-container": "#d5e3fd",
+            "inverse-surface": "#283044",
+            "status-stockout": "#EF4444",
+            "on-secondary-fixed": "#0d1c2f",
+            "on-primary-fixed": "#00174b",
+            "on-primary": "#ffffff",
+            "primary-container": "#2563eb",
+            "inverse-on-surface": "#eef0ff",
+            "primary-fixed": "#dbe1ff",
+            "error": "#ba1a1a",
+            "surface-container-high": "#e2e7ff",
+            "surface-container-lowest": "#ffffff",
+            "background": "#faf8ff",
+            "on-surface": "#131b2e",
+            "tertiary": "#943700",
+            "surface-tint": "#0053db",
+            "on-tertiary-container": "#ffede6",
+            "tertiary-fixed": "#ffdbcd",
+            "tertiary-container": "#bc4800",
+            "secondary-fixed-dim": "#b9c7e0",
+            "surface-container": "#eaedff",
+            "surface": "#faf8ff",
+            "canvas-background": "#F8FAFC",
+            "on-background": "#131b2e",
+            "status-reorder": "#F97316",
+            "on-surface-variant": "#434655",
+            "status-overstock": "#A855F7",
+            "primary-fixed-dim": "#b4c5ff",
+            "on-error": "#ffffff",
+            "inverse-primary": "#b4c5ff",
+            "surface-variant": "#dae2fd",
+            "secondary": "#515f74",
+            "on-tertiary-fixed-variant": "#7d2d00",
+            "border-subtle": "#E2E8F0",
+            "surface-bright": "#faf8ff",
+            "on-secondary-container": "#57657b",
+            "on-tertiary": "#ffffff",
+            "outline": "#737686",
+            "on-secondary-fixed-variant": "#3a485c",
+            "primary": "#004ac6",
+            "on-primary-container": "#eeefff",
+            "surface-card": "#FFFFFF",
+            "tertiary-fixed-dim": "#ffb596",
+            "on-tertiary-fixed": "#360f00",
+            "outline-variant": "#c3c6d7"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter": "1.5rem",
+            "margin": "1.5rem",
+            "space-xs": "0.25rem",
+            "space-md": "1rem",
+            "space-sm": "0.5rem",
+            "space-xl": "2rem",
+            "space-lg": "1.5rem"
+          },
+          "fontFamily": {
+            "label-sm": ["Inter"],
+            "headline-sm": ["Inter"],
+            "headline-metric": ["Inter"],
+            "caption": ["Inter"],
+            "display-lg": ["Inter"],
+            "display-lg-mobile": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-md": ["Inter"]
+          },
+          "fontSize": {
+            "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "headline-metric": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "caption": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "display-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    /* Ambient Level 1 Elevation */
+    .shadow-level-1 {
+      box-shadow: 0px 1px 3px rgba(15, 23, 42, 0.04), 0px 1px 2px rgba(15, 23, 42, 0.02);
+    }
+    /* Ambient Level 2 Elevation */
+    .shadow-level-2 {
+      box-shadow: 0px 10px 15px -3px rgba(15, 23, 42, 0.06), 0px 4px 6px -4px rgba(15, 23, 42, 0.03);
+    }
+  </style>
+</head>
+<body class="bg-canvas-background text-on-surface antialiased min-h-screen flex flex-col font-body-md text-body-md overflow-x-hidden">
+<!-- ========================================================================= -->
+<!-- SIDE NAVIGATION (SideNavBar: desktop_persistent, fixed left-0, w-60)      -->
+<!-- ========================================================================= -->
+<aside class="fixed left-0 top-0 h-screen w-60 z-30 bg-surface-card border-r border-border-subtle shadow-sm flex flex-col justify-between p-4">
+<!-- Top Branding & Primary Routing -->
+<div class="flex flex-col gap-6">
+<!-- Brand Logo / Identity -->
+<div class="flex items-center gap-3 px-2 py-1">
+<div class="w-9 h-9 rounded-lg bg-primary-container text-on-primary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[20px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">auto_graph</span>
+</div>
+<div class="flex flex-col">
+<div class="text-headline-md font-headline-md font-bold text-on-surface tracking-tight">ShelfWise</div>
+<span class="text-caption font-caption text-text-muted">Retail Intelligence</span>
+</div>
+</div>
+<!-- Store Switcher Context -->
+<div class="px-2 py-1.5 rounded-lg bg-canvas-background border border-border-subtle flex items-center justify-between text-secondary cursor-pointer hover:border-primary transition-colors">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-text-muted">storefront</span>
+<div class="flex flex-col text-left">
+<span class="text-label-sm font-label-sm font-semibold text-on-surface truncate max-w-[120px]">All Stores (8)</span>
+<span class="text-caption font-caption text-text-muted">North-East Region</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-[16px] text-text-muted">unfold_more</span>
+</div>
+<!-- Navigation Menu: 5 tabs, active = Assistant -->
+<nav class="flex flex-col gap-1">
+<!-- Tab 1: Dashboard -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 cursor-pointer active:scale-98" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="text-label-md font-label-md">Dashboard</span>
+</a>
+<!-- Tab 2: Upload -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 cursor-pointer active:scale-98" href="#">
+<span class="material-symbols-outlined text-[20px]">cloud_upload</span>
+<span class="text-label-md font-label-md">Upload</span>
+</a>
+<!-- Tab 3: Forecast -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 cursor-pointer active:scale-98" href="#">
+<span class="material-symbols-outlined text-[20px]">trending_up</span>
+<span class="text-label-md font-label-md">Forecast</span>
+</a>
+<!-- Tab 4: Inventory -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 cursor-pointer active:scale-98" href="#">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+<span class="text-label-md font-label-md">Inventory</span>
+</a>
+<!-- Tab 5: Assistant (ACTIVE) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary-container text-on-primary font-medium shadow-sm transition-all duration-150 cursor-pointer active:scale-98" href="#">
+<span class="material-symbols-outlined text-[20px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+<span class="text-label-md font-label-md font-semibold">Assistant</span>
+<span class="ml-auto flex h-2 w-2 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Actions & Storage Status -->
+<div class="flex flex-col gap-3 pt-3 border-t border-border-subtle">
+<!-- Storage Status Card -->
+<div class="p-2.5 rounded-lg bg-canvas-background border border-border-subtle flex flex-col gap-2">
+<div class="flex items-center justify-between text-caption font-caption text-secondary">
+<span class="flex items-center gap-1.5 font-medium">
+<span class="material-symbols-outlined text-[15px] text-text-muted">database</span>
+            Storage: 84% Used
+          </span>
+<span class="font-semibold text-on-surface">4.2 / 5 GB</span>
+</div>
+<div class="w-full bg-border-subtle rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary-container h-1.5 rounded-full" style="width: 84%"></div>
+</div>
+<button class="w-full py-1 text-center text-label-sm font-label-sm font-medium text-primary-container hover:text-primary transition-colors">
+          Upgrade Storage
+        </button>
+</div>
+<!-- Settings Link -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-secondary font-normal hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="text-label-md font-label-md">Settings</span>
+</a>
+</div>
+</aside>
+<!-- ========================================================================= -->
+<!-- TOP NAVIGATION (TopNavBar: desktop_header, fixed top-0 left-60 right-0)   -->
+<!-- ========================================================================= -->
+<header class="fixed top-0 right-0 left-60 h-16 z-20 bg-surface-card border-b border-border-subtle shadow-sm flex items-center justify-between px-6">
+<!-- Left Section: Search & Identity Context -->
+<div class="flex items-center gap-4 w-96">
+<div class="relative w-full">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-text-muted">
+<span class="material-symbols-outlined text-[18px]">search</span>
+</span>
+<input class="w-full pl-9 pr-3 py-1.5 rounded-lg border border-border-subtle bg-canvas-background text-body-md font-body-md text-on-surface placeholder:text-text-muted focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all" placeholder="Search conversation history or queries..." type="text"/>
+</div>
+</div>
+<!-- Center/Context Title -->
+<div class="hidden lg:flex items-center gap-2">
+<span class="text-headline-sm font-headline-sm text-on-surface font-semibold tracking-tight">ShelfWise AI Assistant</span>
+<span class="text-caption font-caption text-text-muted px-2 py-0.5 rounded bg-surface-container-low border border-border-subtle">v3.4 Production</span>
+</div>
+<!-- Right Controls: Status Chip, Notifications, Help, Profile -->
+<div class="flex items-center gap-3">
+<!-- AI Engine Synced Badge -->
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-status-healthy border border-emerald-200">
+<span class="w-1.5 h-1.5 rounded-full bg-status-healthy animate-pulse"></span>
+<span class="text-label-sm font-label-sm font-medium text-emerald-800">AI Engine Synced</span>
+</div>
+<!-- Trailing Action Icons -->
+<button class="w-9 h-9 rounded-lg flex items-center justify-center text-secondary hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 relative">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-status-reorder ring-2 ring-surface-card"></span>
+</button>
+<button class="w-9 h-9 rounded-lg flex items-center justify-center text-secondary hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150">
+<span class="material-symbols-outlined text-[20px]">help_outline</span>
+</button>
+<!-- User Profile -->
+<div class="flex items-center gap-2.5 pl-2 border-l border-border-subtle ml-1">
+<div class="w-8 h-8 rounded-full bg-primary-fixed text-primary flex items-center justify-center font-bold text-label-sm overflow-hidden ring-1 ring-border-subtle">
+<img class="w-full h-full object-cover" data-alt="Professional flat avatar portrait illustration of a retail store operations manager with glasses, neutral slate background, clean corporate SaaS design system style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1t_o3X5AfUOoFtGclgiJC5ip39myAJbpKngTqBqnEFK41qDPWxW-PQ-14WD1gqbp2buVVeRaE2-GICibft0mN2OuBgILQsjuDbBQyEbqeJdVRaJCSPtxkuTabVHhQ9Shn4zZT-IBK83um1NUiNFqcEPFzAZ7R3mpd50YC_6XiYrzsgc3SFD7JlAhj1dbwi6v63dFDgiyEbbQBjBcPpsegm6d5y2NyBVDT948h_tQ"/>
+</div>
+<div class="hidden xl:flex flex-col text-left">
+<span class="text-label-sm font-label-sm font-semibold text-on-surface">Retail Ops Lead</span>
+<span class="text-caption font-caption text-text-muted">demo@shelfwise.app</span>
+</div>
+</div>
+</div>
+</header>
+<!-- ========================================================================= -->
+<!-- MAIN CONTENT CANVAS (Responsive center workspace max-w-4xl)               -->
+<!-- ========================================================================= -->
+<main class="ml-60 pt-16 flex-1 flex flex-col items-center justify-between pb-4">
+<!-- Scrollable Chat Stream Container -->
+<div class="w-full max-w-4xl px-6 py-8 flex flex-col gap-8">
+<!-- 1. Header / Welcome Banner -->
+<div class="flex flex-col items-center text-center gap-3 pt-2 pb-4">
+<div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-primary to-primary-container text-on-primary flex items-center justify-center shadow-level-1">
+<span class="material-symbols-outlined text-[26px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<div class="flex flex-col gap-1 max-w-xl">
+<h1 class="text-headline-md font-headline-md font-bold text-on-surface">
+            Demand &amp; Inventory Intelligence Co-Pilot
+          </h1>
+<p class="text-body-md font-body-md text-text-muted">
+            Ask anything about store demand forecasts, reorder recommendations, or inventory anomalies across your 8 retail locations.
+          </p>
+</div>
+</div>
+<!-- 2. Suggestion Prompt Chips -->
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+<!-- Chip 1 -->
+<button class="flex items-center gap-2.5 p-3 rounded-xl bg-surface-card border border-border-subtle hover:border-primary-container shadow-level-1 text-left transition-all duration-150 group hover:-translate-y-0.5">
+<div class="w-8 h-8 rounded-lg bg-red-50 text-status-stockout flex items-center justify-center flex-shrink-0 group-hover:bg-red-100 transition-colors">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+</div>
+<span class="text-label-sm font-label-sm font-medium text-on-surface leading-snug">
+            Which items will stock out soon?
+          </span>
+</button>
+<!-- Chip 2 -->
+<button class="flex items-center gap-2.5 p-3 rounded-xl bg-surface-card border border-border-subtle hover:border-primary-container shadow-level-1 text-left transition-all duration-150 group hover:-translate-y-0.5">
+<div class="w-8 h-8 rounded-lg bg-blue-50 text-primary-container flex items-center justify-center flex-shrink-0 group-hover:bg-blue-100 transition-colors">
+<span class="material-symbols-outlined text-[18px]">trending_up</span>
+</div>
+<span class="text-label-sm font-label-sm font-medium text-on-surface leading-snug">
+            Why is demand rising for S1097 P1?
+          </span>
+</button>
+<!-- Chip 3 -->
+<button class="flex items-center gap-2.5 p-3 rounded-xl bg-surface-card border border-border-subtle hover:border-primary-container shadow-level-1 text-left transition-all duration-150 group hover:-translate-y-0.5">
+<div class="w-8 h-8 rounded-lg bg-amber-50 text-status-reorder flex items-center justify-center flex-shrink-0 group-hover:bg-amber-100 transition-colors">
+<span class="material-symbols-outlined text-[18px]">shopping_cart</span>
+</div>
+<span class="text-label-sm font-label-sm font-medium text-on-surface leading-snug">
+            What should I reorder this week?
+          </span>
+</button>
+<!-- Chip 4 -->
+<button class="flex items-center gap-2.5 p-3 rounded-xl bg-surface-card border border-border-subtle hover:border-primary-container shadow-level-1 text-left transition-all duration-150 group hover:-translate-y-0.5">
+<div class="w-8 h-8 rounded-lg bg-emerald-50 text-status-healthy flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-100 transition-colors">
+<span class="material-symbols-outlined text-[18px]">insights</span>
+</div>
+<span class="text-label-sm font-label-sm font-medium text-on-surface leading-snug">
+            How accurate is the forecast?
+          </span>
+</button>
+</div>
+<!-- 3. Conversation Thread -->
+<div class="flex flex-col gap-6 w-full">
+<!-- ======================= User Message 1 ======================= -->
+<div class="flex justify-end items-end gap-2.5">
+<div class="max-w-xl bg-primary-container text-on-primary px-4 py-3 rounded-2xl rounded-br-sm shadow-level-1 text-body-md font-body-md">
+<p>Which items will stock out soon across our stores?</p>
+</div>
+<div class="w-7 h-7 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center text-caption font-caption font-semibold flex-shrink-0 mb-0.5">
+            RO
+          </div>
+</div>
+<!-- ======================= Assistant Response 1 ======================= -->
+<div class="flex items-start gap-3 w-full">
+<!-- ShelfWise AI Avatar -->
+<div class="w-8 h-8 rounded-xl bg-primary-container text-on-primary flex items-center justify-center shadow-level-1 flex-shrink-0 mt-1">
+<span class="material-symbols-outlined text-[18px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<!-- Assistant Structured Card -->
+<div class="flex-1 bg-surface-card border border-border-subtle rounded-2xl rounded-tl-sm p-5 shadow-level-1 flex flex-col gap-4">
+<div class="flex items-center justify-between border-b border-border-subtle pb-3">
+<div class="flex items-center gap-2">
+<span class="text-label-md font-label-md font-semibold text-on-surface">Stockout Risk Analysis</span>
+<span class="px-2 py-0.5 rounded-full text-caption font-caption bg-red-50 text-status-stockout font-medium border border-red-200">
+                  4 High-Risk SKUs Identified
+                </span>
+</div>
+<span class="text-caption font-caption text-text-muted">Analyzed 1,420 store SKUs (Synced 14m ago)</span>
+</div>
+<!-- Markdown Answer -->
+<div class="text-body-md font-body-md text-on-surface leading-relaxed">
+              Based on the latest 28-day LightGBM demand projection, <strong class="text-status-stockout font-semibold">4 items</strong> will reach critical zero-stock conditions within the next 4 to 6 business days. Lead times from primary distributors range between 3–5 days, meaning purchase orders must be finalized today to avert lost revenue.
+            </div>
+<!-- Structured SKU Vulnerability Table -->
+<div class="border border-border-subtle rounded-xl overflow-hidden shadow-level-1">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-canvas-background h-10 border-b border-border-subtle text-caption font-caption uppercase tracking-wider text-text-muted font-medium">
+<th class="py-2 px-3 text-left">Store</th>
+<th class="py-2 px-3 text-left">SKU &amp; Item</th>
+<th class="py-2 px-3 text-right">Days Cover</th>
+<th class="py-2 px-3 text-center">Stockout ETA</th>
+<th class="py-2 px-3 text-right">Suggested PO</th>
+<th class="py-2 px-3 text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-subtle text-body-sm font-body-sm">
+<!-- Row 1 -->
+<tr class="hover:bg-canvas-background transition-colors h-[48px]">
+<td class="py-2 px-3 font-medium text-on-surface">Store #104 (Downtown)</td>
+<td class="py-2 px-3">
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">S1097 P1 · Artisan Cold Brew 12oz</span>
+<span class="text-caption font-caption text-text-muted">Vendor: Beantown Roasters</span>
+</div>
+</td>
+<td class="py-2 px-3 text-right">
+<span class="inline-flex items-center gap-1 font-semibold text-status-stockout">
+<span class="w-1.5 h-1.5 rounded-full bg-status-stockout"></span> 1.8 Days
+                      </span>
+</td>
+<td class="py-2 px-3 text-center text-text-muted">Thursday (Nov 14)</td>
+<td class="py-2 px-3 text-right font-semibold text-on-surface">120 units</td>
+<td class="py-2 px-3 text-right">
+<button class="px-2.5 py-1 text-label-sm font-label-sm rounded-lg bg-primary-container text-on-primary hover:bg-primary font-medium transition-colors shadow-sm">
+                        Draft PO
+                      </button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-canvas-background transition-colors h-[48px]">
+<td class="py-2 px-3 font-medium text-on-surface">Store #108 (Westside)</td>
+<td class="py-2 px-3">
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">S2041 P4 · Organic Oat Barista 32oz</span>
+<span class="text-caption font-caption text-text-muted">Vendor: Valley Grains Co</span>
+</div>
+</td>
+<td class="py-2 px-3 text-right">
+<span class="inline-flex items-center gap-1 font-semibold text-status-stockout">
+<span class="w-1.5 h-1.5 rounded-full bg-status-stockout"></span> 2.1 Days
+                      </span>
+</td>
+<td class="py-2 px-3 text-center text-text-muted">Friday (Nov 15)</td>
+<td class="py-2 px-3 text-right font-semibold text-on-surface">85 units</td>
+<td class="py-2 px-3 text-right">
+<button class="px-2.5 py-1 text-label-sm font-label-sm rounded-lg bg-primary-container text-on-primary hover:bg-primary font-medium transition-colors shadow-sm">
+                        Draft PO
+                      </button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-canvas-background transition-colors h-[48px]">
+<td class="py-2 px-3 font-medium text-on-surface">Store #102 (Metro Plaza)</td>
+<td class="py-2 px-3">
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">S3110 P2 · Ceremonial Matcha Tin 50g</span>
+<span class="text-caption font-caption text-text-muted">Vendor: Pacific Botanicals</span>
+</div>
+</td>
+<td class="py-2 px-3 text-right">
+<span class="inline-flex items-center gap-1 font-semibold text-status-reorder">
+<span class="w-1.5 h-1.5 rounded-full bg-status-reorder"></span> 3.4 Days
+                      </span>
+</td>
+<td class="py-2 px-3 text-center text-text-muted">Saturday (Nov 16)</td>
+<td class="py-2 px-3 text-right font-semibold text-on-surface">40 units</td>
+<td class="py-2 px-3 text-right">
+<button class="px-2.5 py-1 text-label-sm font-label-sm rounded-lg bg-primary-container text-on-primary hover:bg-primary font-medium transition-colors shadow-sm">
+                        Draft PO
+                      </button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-canvas-background transition-colors h-[48px]">
+<td class="py-2 px-3 font-medium text-on-surface">Store #110 (Uptown)</td>
+<td class="py-2 px-3">
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">S4420 P8 · Dark Roast Espresso Blend 1kg</span>
+<span class="text-caption font-caption text-text-muted">Vendor: Beantown Roasters</span>
+</div>
+</td>
+<td class="py-2 px-3 text-right">
+<span class="inline-flex items-center gap-1 font-semibold text-status-reorder">
+<span class="w-1.5 h-1.5 rounded-full bg-status-reorder"></span> 3.9 Days
+                      </span>
+</td>
+<td class="py-2 px-3 text-center text-text-muted">Sunday (Nov 17)</td>
+<td class="py-2 px-3 text-right font-semibold text-on-surface">50 units</td>
+<td class="py-2 px-3 text-right">
+<button class="px-2.5 py-1 text-label-sm font-label-sm rounded-lg bg-primary-container text-on-primary hover:bg-primary font-medium transition-colors shadow-sm">
+                        Draft PO
+                      </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Quick Action Chips Under Assistant Message -->
+<div class="flex flex-wrap items-center gap-2 pt-1 border-t border-border-subtle mt-1">
+<span class="text-caption font-caption text-text-muted font-medium mr-1">Recommended actions:</span>
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border-subtle bg-canvas-background hover:bg-surface-card text-label-sm font-label-sm text-secondary hover:text-on-surface transition-colors shadow-level-1">
+<span class="material-symbols-outlined text-[16px] text-text-muted">file_download</span>
+                Export SKU list
+              </button>
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-primary-fixed bg-surface-container-low hover:bg-surface-container text-label-sm font-label-sm text-primary font-medium transition-colors shadow-level-1">
+<span class="material-symbols-outlined text-[16px] text-primary">add_shopping_cart</span>
+                Draft Purchase Orders
+              </button>
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border-subtle bg-canvas-background hover:bg-surface-card text-label-sm font-label-sm text-secondary hover:text-on-surface transition-colors shadow-level-1">
+<span class="material-symbols-outlined text-[16px] text-text-muted">show_chart</span>
+                Show Demand Curve
+              </button>
+</div>
+</div>
+</div>
+<!-- ======================= User Message 2 ======================= -->
+<div class="flex justify-end items-end gap-2.5 pt-2">
+<div class="max-w-xl bg-primary-container text-on-primary px-4 py-3 rounded-2xl rounded-br-sm shadow-level-1 text-body-md font-body-md">
+<p>Why is demand rising for S1097 P1?</p>
+</div>
+<div class="w-7 h-7 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center text-caption font-caption font-semibold flex-shrink-0 mb-0.5">
+            RO
+          </div>
+</div>
+<!-- ======================= Assistant Response 2 ======================= -->
+<div class="flex items-start gap-3 w-full">
+<!-- AI Avatar -->
+<div class="w-8 h-8 rounded-xl bg-primary-container text-on-primary flex items-center justify-center shadow-level-1 flex-shrink-0 mt-1">
+<span class="material-symbols-outlined text-[18px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<!-- Assistant Structured Card -->
+<div class="flex-1 bg-surface-card border border-border-subtle rounded-2xl rounded-tl-sm p-5 shadow-level-1 flex flex-col gap-4">
+<div class="flex items-center justify-between border-b border-border-subtle pb-3">
+<div class="flex items-center gap-2">
+<span class="text-label-md font-label-md font-semibold text-on-surface">Demand Attribution Breakdown</span>
+<span class="px-2 py-0.5 rounded-full text-caption font-caption bg-emerald-50 text-status-healthy font-medium border border-emerald-200">
+                  +34.2% DoD Velocity
+                </span>
+</div>
+<span class="text-caption font-caption text-text-muted">Product ID: S1097 P1 (Artisan Cold Brew)</span>
+</div>
+<!-- Text Explanation -->
+<div class="text-body-md font-body-md text-on-surface leading-relaxed">
+              Demand for <strong>S1097 P1</strong> has increased by <span class="text-emerald-700 font-semibold">+34.2%</span> over historical baseline. The causal decomposition engine attributes this acceleration to three primary drivers:
+            </div>
+<!-- Bento Mini Grid Factor Breakdown -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+<!-- Factor 1 -->
+<div class="p-3 rounded-xl bg-canvas-background border border-border-subtle flex flex-col justify-between">
+<div class="flex items-center justify-between mb-2">
+<span class="text-caption font-caption uppercase tracking-wider text-text-muted font-medium">Factor 1: Promo Effect</span>
+<span class="material-symbols-outlined text-[18px] text-primary-container">sell</span>
+</div>
+<div class="text-headline-sm font-headline-sm font-bold text-on-surface">+18.5%</div>
+<p class="text-caption font-caption text-text-muted mt-1">
+                  Active "Fall Chilled Drinks" app coupon (ends in 3 days).
+                </p>
+</div>
+<!-- Factor 2 -->
+<div class="p-3 rounded-xl bg-canvas-background border border-border-subtle flex flex-col justify-between">
+<div class="flex items-center justify-between mb-2">
+<span class="text-caption font-caption uppercase tracking-wider text-text-muted font-medium">Factor 2: Weather Lift</span>
+<span class="material-symbols-outlined text-[18px] text-status-reorder">wb_sunny</span>
+</div>
+<div class="text-headline-sm font-headline-sm font-bold text-on-surface">+10.2%</div>
+<p class="text-caption font-caption text-text-muted mt-1">
+                  Regional unseasonably warm spell (+6°F above seasonal avg).
+                </p>
+</div>
+<!-- Factor 3 -->
+<div class="p-3 rounded-xl bg-canvas-background border border-border-subtle flex flex-col justify-between">
+<div class="flex items-center justify-between mb-2">
+<span class="text-caption font-caption uppercase tracking-wider text-text-muted font-medium">Factor 3: Weekend Velocity</span>
+<span class="material-symbols-outlined text-[18px] text-purple-600">event_repeat</span>
+</div>
+<div class="text-headline-sm font-headline-sm font-bold text-on-surface">+5.5%</div>
+<p class="text-caption font-caption text-text-muted mt-1">
+                  Higher recurring foot traffic near Downtown campus stores.
+                </p>
+</div>
+</div>
+<!-- Mini Stat Sparkline Badge -->
+<div class="p-3 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-primary-container text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">query_stats</span>
+</div>
+<div>
+<div class="text-label-sm font-label-sm font-semibold text-on-surface">Predictive Confidence Score: 94.8%</div>
+<div class="text-caption font-caption text-text-muted">Model trained on 52 weeks historical seasonality &amp; live POS data</div>
+</div>
+</div>
+<button class="px-3 py-1 rounded-lg bg-surface-card border border-border-subtle text-label-sm font-label-sm font-medium text-secondary hover:text-on-surface transition-colors shadow-sm">
+                View Full Decomposition
+              </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ========================================================================= -->
+<!-- STICKY BOTTOM INPUT BAR                                                   -->
+<!-- ========================================================================= -->
+<div class="w-full max-w-4xl px-6 sticky bottom-4 z-10">
+<div class="bg-surface-card border border-border-subtle rounded-2xl shadow-level-2 p-2.5 flex flex-col gap-2">
+<!-- Textarea / Input Field -->
+<div class="w-full px-2 pt-1">
+<textarea class="w-full resize-none border-none p-0 text-body-md font-body-md text-on-surface placeholder:text-text-muted focus:ring-0 focus:outline-none bg-transparent" placeholder="Ask ShelfWise about inventory, forecasts, suppliers, or purchase orders..." rows="2"></textarea>
+</div>
+<!-- Controls Inside Input Bar -->
+<div class="flex items-center justify-between pt-1 border-t border-border-subtle">
+<!-- Left Controls: Attachment & Model Indicator -->
+<div class="flex items-center gap-2">
+<!-- Attachment Button -->
+<button class="p-1.5 rounded-lg text-secondary hover:text-on-surface hover:bg-canvas-background transition-colors flex items-center gap-1 text-label-sm font-label-sm" title="Upload POS or CSV logs">
+<span class="material-symbols-outlined text-[20px]">attach_file</span>
+<span class="hidden sm:inline text-text-muted">Attach CSV</span>
+</button>
+<!-- Agent Model Badge -->
+<div class="inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-canvas-background border border-border-subtle text-caption font-caption text-secondary">
+<span class="material-symbols-outlined text-[14px] text-primary-container">memory</span>
+<span class="font-medium text-on-surface">LightGBM + GPT-4o Retail Agent</span>
+</div>
+</div>
+<!-- Right Action: Voice and Send Buttons -->
+<div class="flex items-center gap-2">
+<button class="p-2 rounded-lg text-secondary hover:text-on-surface hover:bg-canvas-background transition-colors" title="Voice Input">
+<span class="material-symbols-outlined text-[20px]">mic</span>
+</button>
+<button class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-primary-container text-on-primary font-label-md font-label-md font-medium hover:bg-primary transition-all duration-150 shadow-sm active:scale-95">
+<span>Send</span>
+<span class="material-symbols-outlined text-[18px]">send</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Legal / AI Safety Disclaimer -->
+<p class="text-center text-caption font-caption text-text-muted mt-2">
+        ShelfWise Assistant uses your trained 28-day demand models and live POS sync. Verify PO quantities before submission.
+      </p>
+</div>
+</main>
+</body></html>

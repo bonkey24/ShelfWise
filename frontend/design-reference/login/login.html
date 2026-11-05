@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sign In · ShelfWise Retail Intelligence</title>
+<!-- Inter Google Font -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Exact Tailwind Configuration verbatim -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary-fixed-dim": "#b9c7e0",
+            "inverse-on-surface": "#eef0ff",
+            "on-surface": "#131b2e",
+            "surface-container": "#eaedff",
+            "outline-variant": "#c3c6d7",
+            "status-reorder": "#F97316",
+            "surface-bright": "#faf8ff",
+            "tertiary-fixed": "#ffdbcd",
+            "error-container": "#ffdad6",
+            "on-surface-variant": "#434655",
+            "secondary-fixed": "#d5e3fd",
+            "on-tertiary": "#ffffff",
+            "primary": "#004ac6",
+            "primary-fixed-dim": "#b4c5ff",
+            "status-stockout": "#EF4444",
+            "on-secondary-fixed": "#0d1c2f",
+            "surface": "#faf8ff",
+            "status-overstock": "#A855F7",
+            "tertiary-fixed-dim": "#ffb596",
+            "on-primary-container": "#eeefff",
+            "on-secondary-fixed-variant": "#3a485c",
+            "text-muted": "#64748B",
+            "surface-tint": "#0053db",
+            "surface-container-high": "#e2e7ff",
+            "on-tertiary-fixed": "#360f00",
+            "on-tertiary-container": "#ffede6",
+            "error": "#ba1a1a",
+            "status-healthy": "#10B981",
+            "on-error-container": "#93000a",
+            "on-secondary-container": "#57657b",
+            "secondary": "#515f74",
+            "on-primary": "#ffffff",
+            "primary-fixed": "#dbe1ff",
+            "surface-container-highest": "#dae2fd",
+            "surface-card": "#FFFFFF",
+            "secondary-container": "#d5e3fd",
+            "on-secondary": "#ffffff",
+            "surface-dim": "#d2d9f4",
+            "on-error": "#ffffff",
+            "inverse-primary": "#b4c5ff",
+            "surface-container-lowest": "#ffffff",
+            "outline": "#737686",
+            "on-primary-fixed-variant": "#003ea8",
+            "surface-variant": "#dae2fd",
+            "surface-container-low": "#f2f3ff",
+            "tertiary-container": "#bc4800",
+            "tertiary": "#943700",
+            "on-background": "#131b2e",
+            "background": "#faf8ff",
+            "on-tertiary-fixed-variant": "#7d2d00",
+            "border-subtle": "#E2E8F0",
+            "canvas-background": "#F8FAFC",
+            "inverse-surface": "#283044",
+            "on-primary-fixed": "#00174b",
+            "primary-container": "#2563eb"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "space-lg": "1.5rem",
+            "gutter": "1.5rem",
+            "space-xl": "2rem",
+            "space-md": "1rem",
+            "margin": "1.5rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "headline-metric": ["Inter"],
+            "body-md": ["Inter"],
+            "caption": ["Inter"],
+            "headline-md": ["Inter"],
+            "headline-sm": ["Inter"],
+            "display-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "display-lg-mobile": ["Inter"],
+            "label-sm": ["Inter"]
+          },
+          "fontSize": {
+            "headline-metric": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "caption": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "display-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-canvas-background text-on-surface antialiased font-body-md text-body-md h-screen overflow-hidden selection:bg-primary-fixed selection:text-primary">
+<!-- Desktop Full Screen Split (100vh) -->
+<main class="w-full h-full flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden">
+<!-- LEFT HALF: Brand Showcase Panel (50% desktop width, rich gradient + analytical context) -->
+<section class="lg:w-1/2 w-full bg-gradient-to-br from-[#1E40AF] via-primary-container to-[#1d4ed8] text-on-primary flex flex-col justify-between p-8 xl:p-14 relative overflow-hidden flex-shrink-0">
+<!-- Subtle Decorative Background Grid & Radial Glow -->
+<div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(circle at 25px 25px, rgba(255, 255, 255, 0.4) 2px, transparent 0); background-size: 32px 32px;"></div>
+<div class="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-white opacity-10 blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-24 -right-24 w-96 h-96 rounded-full bg-primary-fixed opacity-20 blur-3xl pointer-events-none"></div>
+<!-- Content Container -->
+<div class="relative z-10 flex flex-col h-full justify-between gap-8">
+<!-- Header Branding & Tag -->
+<div>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-white text-2xl" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<div class="flex items-center gap-2.5">
+<span class="font-display-lg text-display-lg text-white font-bold tracking-tight leading-none">ShelfWise</span>
+<span class="px-2.5 py-1 rounded-full bg-white/15 backdrop-blur-sm border border-white/25 text-white font-label-sm text-label-sm tracking-wide">
+                Retail Intelligence
+              </span>
+</div>
+</div>
+</div>
+<!-- Central Value Narrative & Feature Cards -->
+<div class="space-y-8 my-auto py-4">
+<div class="space-y-3 max-w-xl">
+<h1 class="font-display-lg text-display-lg text-white font-bold leading-tight">
+              Know what to stock, before the shelf runs empty.
+            </h1>
+<p class="font-body-lg text-body-lg text-white/80 leading-relaxed max-w-lg">
+              Predictive retail AI built specifically for boutique operators and multi-location managers. Seamless forecasting without legacy ERP drag.
+            </p>
+</div>
+<!-- Feature Highlight Cards / Bullets -->
+<div class="space-y-3 max-w-lg">
+<!-- Feature Card 1 -->
+<div class="flex items-start gap-4 p-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 hover:bg-white/[0.14] transition-colors duration-200">
+<div class="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0 mt-0.5 text-white shadow-sm">
+<span class="material-symbols-outlined text-xl" data-icon="trending_up">trending_up</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-white font-semibold">28-day demand forecasts</h2>
+<p class="font-body-sm text-body-sm text-white/80 mt-0.5">Anticipate customer surge events and seasonal trends with 94%+ accuracy.</p>
+</div>
+</div>
+<!-- Feature Card 2 -->
+<div class="flex items-start gap-4 p-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 hover:bg-white/[0.14] transition-colors duration-200">
+<div class="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0 mt-0.5 text-white shadow-sm">
+<span class="material-symbols-outlined text-xl" data-icon="notifications_active">notifications_active</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-white font-semibold">Reorder alerts</h2>
+<p class="font-body-sm text-body-sm text-white/80 mt-0.5">Automated lead-time triggers before critical SKUs drop below safety thresholds.</p>
+</div>
+</div>
+<!-- Feature Card 3 -->
+<div class="flex items-start gap-4 p-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 hover:bg-white/[0.14] transition-colors duration-200">
+<div class="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0 mt-0.5 text-white shadow-sm">
+<span class="material-symbols-outlined text-xl" data-icon="smart_toy">smart_toy</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-white font-semibold">AI assistant</h2>
+<p class="font-body-sm text-body-sm text-white/80 mt-0.5">Natural language inventory queries, auto-draft purchase orders, and supplier sync.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Social Proof & Customer Endorsement Snippet -->
+<div class="pt-6 border-t border-white/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+<div>
+<div class="flex items-center gap-1.5 text-tertiary-fixed mb-1">
+<span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-sm text-label-sm font-semibold text-white ml-1">4.9 / 5.0</span>
+</div>
+<p class="font-body-sm text-body-sm text-white/90">
+              Trusted by 1,200+ independent retailers and specialty boutiques.
+            </p>
+</div>
+<div class="flex items-center gap-3 bg-white/10 px-3 py-2 rounded-lg border border-white/15">
+<div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white font-bold text-xs">
+              MR
+            </div>
+<div>
+<p class="font-label-sm text-label-sm text-white font-medium">"Cut dead stock by 38% in 60 days."</p>
+<p class="font-caption text-caption text-white/70">M. Rhodes · Mercer Goods Co.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- RIGHT HALF: Auth Card & Form Area (50% desktop width, standalone auth experience) -->
+<section class="lg:w-1/2 w-full bg-canvas-background flex flex-col justify-between items-center p-6 md:p-12 xl:p-16 overflow-y-auto">
+<!-- Top Mobile Brand Pill (Visible on small screens only) -->
+<div class="lg:hidden w-full flex items-center justify-between pb-6 mb-2 border-b border-border-subtle">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">ShelfWise</span>
+</div>
+<span class="font-label-sm text-label-sm px-2.5 py-0.5 rounded-full bg-surface-container text-primary font-medium">Retail Intelligence</span>
+</div>
+<!-- Main Login Card Container -->
+<div class="w-full max-w-md my-auto py-4">
+<!-- Elevated Auth Card (Design System Elevation Level 1) -->
+<div class="bg-surface-card rounded-xl border border-border-subtle p-8 shadow-sm">
+<!-- Header -->
+<div class="mb-6">
+<h2 class="font-display-lg text-display-lg font-bold text-on-surface tracking-tight mb-2">Welcome back</h2>
+<p class="font-body-md text-body-md text-text-muted">
+              Enter your details to access your ShelfWise store intelligence.
+            </p>
+</div>
+<!-- OAuth Provider (Google) -->
+<button class="w-full h-11 px-4 rounded-lg border border-border-subtle bg-surface-card hover:bg-canvas-background text-on-surface font-label-md text-label-md flex items-center justify-center gap-3 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary-container focus:ring-offset-2" type="button">
+<svg aria-hidden="true" class="w-5 h-5 flex-shrink-0" viewbox="0 0 24 24">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"></path>
+</svg>
+<span>Sign in with Google</span>
+</button>
+<!-- Divider -->
+<div class="relative my-6 flex items-center justify-center">
+<div class="w-full border-t border-border-subtle"></div>
+<span class="absolute px-3 bg-surface-card text-text-muted font-label-sm text-label-sm uppercase tracking-wider">
+              or sign in with email
+            </span>
+</div>
+<!-- Credentials Form -->
+<form class="space-y-4" onsubmit="event.preventDefault();">
+<!-- Store Email Field -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1.5" for="store-email">
+                Store Email
+              </label>
+<div class="relative rounded-lg">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-text-muted">
+<span class="material-symbols-outlined text-lg" data-icon="mail">mail</span>
+</div>
+<input class="block w-full pl-10 pr-3.5 py-2.5 bg-surface-card border border-border-subtle rounded-lg text-on-surface placeholder:text-text-muted font-body-md text-body-md focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all duration-150" id="store-email" name="email" placeholder="name@store.com" required="" type="email" value="demo@shelfwise.app"/>
+</div>
+</div>
+<!-- Password Field -->
+<div>
+<div class="flex items-center justify-between mb-1.5">
+<label class="block font-label-md text-label-md text-on-surface" for="store-password">
+                  Password
+                </label>
+<a class="font-label-sm text-label-sm font-medium text-primary-container hover:text-primary hover:underline transition-colors duration-150" href="#">
+                  Forgot password?
+                </a>
+</div>
+<div class="relative rounded-lg">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-text-muted">
+<span class="material-symbols-outlined text-lg" data-icon="lock">lock</span>
+</div>
+<input class="block w-full pl-10 pr-10 py-2.5 bg-surface-card border border-border-subtle rounded-lg text-on-surface placeholder:text-text-muted font-body-md text-body-md focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all duration-150" id="store-password" name="password" placeholder="Enter your password" required="" type="password" value="••••••••••••"/>
+<button aria-label="Toggle password visibility" class="absolute inset-y-0 right-0 pr-3 flex items-center text-text-muted hover:text-on-surface focus:outline-none" id="toggle-password" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="visibility" id="toggle-icon">visibility</span>
+</button>
+</div>
+</div>
+<!-- Remember Device Checkbox -->
+<div class="flex items-center pt-1">
+<input checked="" class="w-4 h-4 text-primary-container border-border-subtle rounded focus:ring-primary-container/30 focus:ring-offset-0 transition-colors" id="remember-device" name="remember" type="checkbox"/>
+<label class="ml-2.5 block font-body-sm text-body-sm text-text-muted select-none cursor-pointer" for="remember-device">
+                Remember this device for 30 days
+              </label>
+</div>
+<!-- Submit Primary Button -->
+<div class="pt-2">
+<button class="w-full h-11 px-4 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md font-medium hover:bg-primary transition-all duration-150 shadow-sm hover:shadow active:scale-[0.99] flex items-center justify-center gap-2 group cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-container focus:ring-offset-2" type="submit">
+<span>Sign in to Dashboard</span>
+<span class="material-symbols-outlined text-lg group-hover:translate-x-0.5 transition-transform duration-150" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</form>
+<!-- Sign Up Redirection -->
+<div class="mt-6 pt-5 border-t border-border-subtle text-center">
+<p class="font-body-md text-body-md text-text-muted">
+              Don't have an account? 
+              <a class="font-label-md text-label-md font-semibold text-primary-container hover:text-primary hover:underline ml-1" href="#">
+                Create an account
+              </a>
+</p>
+</div>
+</div>
+</div>
+<!-- Trust, Encryption & Security Compliance Footer -->
+<footer class="w-full text-center py-3">
+<div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-text-muted font-caption text-caption">
+<span class="flex items-center gap-1 text-status-healthy font-semibold">
+<span class="material-symbols-outlined text-xs" data-icon="shield">shield</span>
+            256-bit SSL encryption
+          </span>
+<span>·</span>
+<span>SOC2 Type II Certified</span>
+<span>·</span>
+<a class="hover:text-on-surface hover:underline transition-colors" href="#">Privacy Policy</a>
+<span>·</span>
+<a class="hover:text-on-surface hover:underline transition-colors" href="#">Terms of Service</a>
+</div>
+</footer>
+</section>
+</main>
+<!-- Interactive script for Password Toggle -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggleButton = document.getElementById('toggle-password');
+      const passwordInput = document.getElementById('store-password');
+      const toggleIcon = document.getElementById('toggle-icon');
+
+      if (toggleButton && passwordInput && toggleIcon) {
+        toggleButton.addEventListener('click', () => {
+          const isPassword = passwordInput.getAttribute('type') === 'password';
+          passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+          toggleIcon.textContent = isPassword ? 'visibility_off' : 'visibility';
+          toggleIcon.setAttribute('data-icon', isPassword ? 'visibility_off' : 'visibility');
+        });
+      }
+    });
+  </script>
+</body></html>

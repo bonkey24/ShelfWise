@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ShelfWise - Inventory Alerts &amp; Stock Runway</title>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary-fixed": "#d5e3fd",
+            "surface-container-high": "#e2e7ff",
+            "tertiary-fixed": "#ffdbcd",
+            "surface-tint": "#0053db",
+            "on-secondary-fixed": "#0d1c2f",
+            "on-error-container": "#93000a",
+            "surface-container-highest": "#dae2fd",
+            "surface-card": "#FFFFFF",
+            "primary-fixed-dim": "#b4c5ff",
+            "tertiary": "#943700",
+            "secondary-container": "#d5e3fd",
+            "canvas-background": "#F8FAFC",
+            "secondary-fixed-dim": "#b9c7e0",
+            "outline-variant": "#c3c6d7",
+            "background": "#faf8ff",
+            "border-subtle": "#E2E8F0",
+            "status-healthy": "#10B981",
+            "surface-container": "#eaedff",
+            "on-primary-fixed": "#00174b",
+            "surface-bright": "#faf8ff",
+            "status-overstock": "#A855F7",
+            "primary": "#004ac6",
+            "on-tertiary-container": "#ffede6",
+            "inverse-primary": "#b4c5ff",
+            "on-error": "#ffffff",
+            "tertiary-fixed-dim": "#ffb596",
+            "on-secondary": "#ffffff",
+            "inverse-surface": "#283044",
+            "text-muted": "#64748B",
+            "primary-fixed": "#dbe1ff",
+            "secondary": "#515f74",
+            "on-tertiary-fixed-variant": "#7d2d00",
+            "on-primary-container": "#eeefff",
+            "surface": "#faf8ff",
+            "on-secondary-container": "#57657b",
+            "on-surface-variant": "#434655",
+            "on-surface": "#131b2e",
+            "on-primary-fixed-variant": "#003ea8",
+            "status-reorder": "#F97316",
+            "on-tertiary": "#ffffff",
+            "primary-container": "#2563eb",
+            "error-container": "#ffdad6",
+            "inverse-on-surface": "#eef0ff",
+            "status-stockout": "#EF4444",
+            "tertiary-container": "#bc4800",
+            "error": "#ba1a1a",
+            "on-secondary-fixed-variant": "#3a485c",
+            "on-primary": "#ffffff",
+            "surface-dim": "#d2d9f4",
+            "outline": "#737686",
+            "surface-variant": "#dae2fd",
+            "on-tertiary-fixed": "#360f00",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f2f3ff",
+            "on-background": "#131b2e"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter": "1.5rem",
+            "space-sm": "0.5rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2rem",
+            "margin": "1.5rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "body-sm": ["Inter"],
+            "display-lg": ["Inter"],
+            "caption": ["Inter"],
+            "headline-metric": ["Inter"],
+            "headline-sm": ["Inter"],
+            "headline-md": ["Inter"],
+            "body-md": ["Inter"],
+            "label-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "body-lg": ["Inter"],
+            "display-lg-mobile": ["Inter"]
+          },
+          "fontSize": {
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "caption": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-metric": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+            "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "display-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-canvas-background text-on-surface antialiased font-body-md text-body-md min-h-screen">
+<!-- Desktop Persistent SideNavBar (Authored strictly from Shared Components JSON) -->
+<aside class="fixed left-0 top-0 h-screen w-60 z-30 bg-surface-card dark:bg-inverse-surface border-r border-border-subtle dark:border-outline-variant shadow-sm dark:shadow-none">
+<div class="flex flex-col justify-between h-full p-4 w-60">
+<!-- Top Brand & Navigation Cluster -->
+<div class="flex flex-col gap-6">
+<!-- Brand Header -->
+<div class="flex items-center gap-3 px-2 pt-2">
+<div class="w-9 h-9 rounded-lg bg-primary-container flex items-center justify-center text-on-primary shadow-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="auto_awesome" data-weight="fill" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div class="flex flex-col">
+<span class="text-headline-md font-headline-md font-bold text-on-surface dark:text-inverse-on-surface tracking-tight leading-none">ShelfWise</span>
+<span class="text-caption font-caption text-text-muted mt-1">Retail Intelligence</span>
+</div>
+</div>
+<!-- Store Switcher Context -->
+<div class="px-2 py-2 bg-canvas-background border border-border-subtle rounded-lg flex items-center justify-between cursor-pointer hover:bg-surface-container-low transition-colors duration-150">
+<div class="flex items-center gap-2 overflow-hidden">
+<span class="material-symbols-outlined text-secondary text-[18px]" data-icon="storefront">storefront</span>
+<div class="flex flex-col truncate">
+<span class="text-caption font-caption text-text-muted leading-tight">Current Scope</span>
+<span class="text-label-sm font-label-sm text-on-surface truncate font-medium">All Stores (4 Locations)</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary text-[18px]" data-icon="unfold_more">unfold_more</span>
+</div>
+<!-- Primary Nav Items -->
+<nav class="flex flex-col gap-1">
+<!-- Dashboard (Inactive) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary dark:text-outline-variant font-normal hover:bg-surface-container-low dark:hover:bg-surface-variant hover:text-on-surface dark:hover:text-inverse-on-surface transition-colors duration-150 cursor-pointer active:scale-98" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span class="text-label-md font-label-md">Dashboard</span>
+</a>
+<!-- Upload (Inactive) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary dark:text-outline-variant font-normal hover:bg-surface-container-low dark:hover:bg-surface-variant hover:text-on-surface dark:hover:text-inverse-on-surface transition-colors duration-150 cursor-pointer active:scale-98" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="cloud_upload">cloud_upload</span>
+<span class="text-label-md font-label-md">Upload</span>
+</a>
+<!-- Forecast (Inactive) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary dark:text-outline-variant font-normal hover:bg-surface-container-low dark:hover:bg-surface-variant hover:text-on-surface dark:hover:text-inverse-on-surface transition-colors duration-150 cursor-pointer active:scale-98" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="trending_up">trending_up</span>
+<span class="text-label-md font-label-md">Forecast</span>
+</a>
+<!-- Inventory (ACTIVE - JSON: style_active_navigation) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary-container text-on-primary font-medium dark:bg-primary-container dark:text-on-primary cursor-pointer transition-all duration-150 active:scale-98 shadow-sm" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="inventory_2" data-weight="fill" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span class="text-label-md font-label-md">Inventory</span>
+</a>
+<!-- Assistant (Inactive) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary dark:text-outline-variant font-normal hover:bg-surface-container-low dark:hover:bg-surface-variant hover:text-on-surface dark:hover:text-inverse-on-surface transition-colors duration-150 cursor-pointer active:scale-98" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="smart_toy">smart_toy</span>
+<span class="text-label-md font-label-md">Assistant</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Nav / Storage / Settings (JSON specified) -->
+<div class="flex flex-col gap-3 pt-4 border-t border-border-subtle dark:border-outline-variant">
+<!-- Settings Footer Link -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-secondary hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 cursor-pointer" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+<span class="text-label-md font-label-md">Settings</span>
+</a>
+<!-- Storage Card & CTA -->
+<div class="p-3 bg-canvas-background rounded-lg border border-border-subtle flex flex-col gap-2">
+<div class="flex items-center justify-between text-caption font-caption text-secondary">
+<div class="flex items-center gap-1.5 font-medium">
+<span class="material-symbols-outlined text-[16px]" data-icon="database">database</span>
+<span>Storage: 84% Used</span>
+</div>
+<span class="text-text-muted">4.2 / 5 GB</span>
+</div>
+<div class="w-full bg-border-subtle h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full rounded-full" style="width: 84%;"></div>
+</div>
+<button class="text-left text-label-sm font-label-sm text-primary-container font-semibold hover:underline pt-0.5">
+            Upgrade Storage
+          </button>
+</div>
+</div>
+</div>
+</aside>
+<!-- TopNavBar (Persistent Desktop Header: Left 60 fixed, Height 16) -->
+<header class="fixed top-0 right-0 left-60 h-16 z-20 bg-surface-card dark:bg-inverse-surface border-b border-border-subtle dark:border-outline-variant shadow-sm dark:shadow-none">
+<div class="flex items-center justify-between px-6 h-16 w-full">
+<!-- Left: Title & Command Search Bar -->
+<div class="flex items-center gap-6">
+<h1 class="text-headline-sm font-headline-sm font-semibold text-on-surface tracking-tight whitespace-nowrap">
+          Inventory Alerts &amp; Reorder Engine
+        </h1>
+<!-- Global Search Bar -->
+<div class="relative w-80">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-[18px]" data-icon="search">search</span>
+<input class="w-full bg-canvas-background border border-border-subtle rounded-lg pl-9 pr-8 py-1.5 text-body-sm font-body-sm text-on-surface placeholder:text-text-muted focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container" placeholder="Command or search inventory..." type="text"/>
+<kbd class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] bg-surface-card border border-border-subtle px-1.5 py-0.5 rounded text-text-muted font-mono font-medium">⌘K</kbd>
+</div>
+</div>
+<!-- Right: AI Sync Badge, Alerts, Help & User Profile -->
+<div class="flex items-center gap-4">
+<!-- AI Engine Synced Status Chip -->
+<div class="inline-flex items-center gap-2 px-3 py-1 bg-surface-container-low border border-border-subtle rounded-full text-label-sm font-label-sm text-secondary">
+<span class="w-2 h-2 rounded-full bg-status-healthy animate-pulse"></span>
+<span>AI Engine Synced</span>
+<span class="text-caption font-caption text-text-muted">· 5m ago</span>
+</div>
+<div class="h-5 w-px bg-border-subtle"></div>
+<!-- Notification with Badge -->
+<button class="relative p-2 rounded-lg text-secondary hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 cursor-pointer" title="Notifications">
+<span class="material-symbols-outlined text-[20px]" data-icon="notifications">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-status-stockout ring-2 ring-surface-card"></span>
+</button>
+<!-- Help Documentation -->
+<button class="p-2 rounded-lg text-secondary hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 cursor-pointer" title="Help &amp; Documentation">
+<span class="material-symbols-outlined text-[20px]" data-icon="help_outline">help_outline</span>
+</button>
+<!-- User Profile Pill & Log Out -->
+<div class="flex items-center gap-3 pl-2">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-full bg-surface-container border border-border-subtle flex items-center justify-center text-primary font-bold text-caption overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close-up professional photographic portrait of a retail merchandise operations director with warm daylight studio lighting, wearing a minimalist modern slate blue collared shirt, exuding calm confidence against a crisp neutral architectural background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvoLGw4z5PGpMHJX16QU66ZMzzLjZfBo5P0PbCLWErdyf4x5AvokoFAlHvlXkY6pg7oqqsD2sZe1uBdLZVvmlhRi9_PJBgZWlhURiyEjxdgpen7ACIkqDzjKX3QRGcQSi922Py86EPKTLsCqeaett4jwofhmYewMd9l9nijNM7raObkw-VBXIF1oSQ0Mq92CJUDsm0o13bt4KIsnPA-E1v0ob9IP7BHnfA5KEgZCs"/>
+</div>
+<div class="hidden xl:flex flex-col">
+<span class="text-label-sm font-label-sm font-medium text-on-surface leading-tight">demo@shelfwise.app</span>
+<span class="text-caption font-caption text-text-muted">Lead Merchandiser</span>
+</div>
+</div>
+<button class="flex items-center gap-1 px-2.5 py-1 text-label-sm font-label-sm text-secondary hover:text-status-stockout hover:bg-surface-container-low rounded-lg transition-colors duration-150" title="Sign out of ShelfWise">
+<span class="material-symbols-outlined text-[16px]" data-icon="logout">logout</span>
+<span class="hidden 2xl:inline">Log out</span>
+</button>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas (Left margin matches 240px sidebar, top padding matches 64px header) -->
+<main class="ml-60 pt-16 min-h-screen bg-canvas-background">
+<div class="p-6 max-w-[1720px] mx-auto space-y-6">
+<!-- Breadcrumbs & Page Header -->
+<section class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+<div>
+<!-- Breadcrumb Hierarchy -->
+<nav class="flex items-center gap-1.5 text-caption font-caption text-text-muted mb-1">
+<span>ShelfWise</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
+<span>Inventory</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
+<span class="text-on-surface font-medium">Alerts</span>
+</nav>
+<h2 class="text-headline-metric font-headline-metric text-on-surface tracking-tight">
+            Inventory Alerts &amp; Stock Runway
+          </h2>
+<p class="text-body-md font-body-md text-text-muted mt-0.5">
+            Real-time stockout vulnerabilities, lead-time triggers, and AI-recommended replenishment orders across all active stores.
+          </p>
+</div>
+<!-- Primary Action Cluster -->
+<div class="flex items-center gap-3 shrink-0">
+<button class="inline-flex items-center gap-2 px-4 py-2 bg-surface-card border border-border-subtle rounded-lg text-label-md font-label-md text-secondary hover:bg-canvas-background hover:text-on-surface transition-colors duration-150 shadow-sm cursor-pointer">
+<span class="material-symbols-outlined text-[18px]" data-icon="file_download">file_download</span>
+<span>Export Inventory CSV</span>
+</button>
+<button class="inline-flex items-center gap-2 px-4 py-2 bg-primary-container text-on-primary rounded-lg text-label-md font-label-md font-medium hover:bg-primary transition-colors duration-150 shadow-sm cursor-pointer">
+<span class="material-symbols-outlined text-[18px]" data-icon="post_add">post_add</span>
+<span>Create Bulk Purchase Order</span>
+</button>
+</div>
+</section>
+<!-- KPI Summary Filter Chips (Interactive Bento Status Tabs) -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Chip 1: Stockout Risk (Active/High Urgency) -->
+<div class="bg-surface-card border-2 border-status-stockout rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer relative overflow-hidden bg-gradient-to-br from-white to-red-50/30">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2">
+<span class="p-1.5 bg-red-50 rounded-lg text-status-stockout">
+<span class="material-symbols-outlined text-[20px]" data-icon="error" data-weight="fill" style="font-variation-settings: 'FILL' 1;">error</span>
+</span>
+<span class="text-label-md font-label-md font-semibold text-on-surface">Stockout Risk</span>
+</div>
+<span class="px-2 py-0.5 bg-red-100/70 text-status-stockout font-bold text-caption rounded-full">ACTION REQ</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-headline-metric font-headline-metric font-bold text-status-stockout">5</span>
+<span class="text-caption font-caption text-text-muted">SKUs below safety stock</span>
+</div>
+<div class="mt-3 flex items-center justify-between text-caption font-caption pt-2 border-t border-border-subtle/80">
+<span class="text-text-muted">Avg Runway: <strong class="text-status-stockout">1.5 days</strong></span>
+<span class="text-primary-container font-medium hover:underline flex items-center gap-0.5">
+              Filter <span class="material-symbols-outlined text-[14px]" data-icon="arrow_forward">arrow_forward</span>
+</span>
+</div>
+</div>
+<!-- Chip 2: Reorder Now -->
+<div class="bg-surface-card border border-border-subtle rounded-xl p-4 shadow-sm hover:border-status-reorder hover:shadow-md transition-all cursor-pointer bg-gradient-to-br from-white to-orange-50/20">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2">
+<span class="p-1.5 bg-orange-50 rounded-lg text-status-reorder">
+<span class="material-symbols-outlined text-[20px]" data-icon="schedule" data-weight="fill" style="font-variation-settings: 'FILL' 1;">schedule</span>
+</span>
+<span class="text-label-md font-label-md font-semibold text-on-surface">Reorder Now</span>
+</div>
+<span class="px-2 py-0.5 bg-orange-100/70 text-status-reorder font-semibold text-caption rounded-full">TRIGGER POINT</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-headline-metric font-headline-metric font-bold text-status-reorder">12</span>
+<span class="text-caption font-caption text-text-muted">SKUs breached lead threshold</span>
+</div>
+<div class="mt-3 flex items-center justify-between text-caption font-caption pt-2 border-t border-border-subtle/80">
+<span class="text-text-muted">PO Drafts: <strong class="text-on-surface">8 Ready</strong></span>
+<span class="text-secondary font-medium hover:text-on-surface flex items-center gap-0.5">
+              Filter <span class="material-symbols-outlined text-[14px]" data-icon="arrow_forward">arrow_forward</span>
+</span>
+</div>
+</div>
+<!-- Chip 3: Overstock -->
+<div class="bg-surface-card border border-border-subtle rounded-xl p-4 shadow-sm hover:border-status-overstock hover:shadow-md transition-all cursor-pointer bg-gradient-to-br from-white to-purple-50/20">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2">
+<span class="p-1.5 bg-purple-50 rounded-lg text-status-overstock">
+<span class="material-symbols-outlined text-[20px]" data-icon="inventory" data-weight="fill" style="font-variation-settings: 'FILL' 1;">inventory</span>
+</span>
+<span class="text-label-md font-label-md font-semibold text-on-surface">Overstock</span>
+</div>
+<span class="px-2 py-0.5 bg-purple-100/70 text-status-overstock font-semibold text-caption rounded-full">CAPITAL TIED</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-headline-metric font-headline-metric font-bold text-status-overstock">8</span>
+<span class="text-caption font-caption text-text-muted">SKUs &gt; 60 days cover</span>
+</div>
+<div class="mt-3 flex items-center justify-between text-caption font-caption pt-2 border-t border-border-subtle/80">
+<span class="text-text-muted">Value: <strong class="text-on-surface">$14,280</strong></span>
+<span class="text-secondary font-medium hover:text-on-surface flex items-center gap-0.5">
+              Filter <span class="material-symbols-outlined text-[14px]" data-icon="arrow_forward">arrow_forward</span>
+</span>
+</div>
+</div>
+<!-- Chip 4: OK / Optimal -->
+<div class="bg-surface-card border border-border-subtle rounded-xl p-4 shadow-sm hover:border-status-healthy hover:shadow-md transition-all cursor-pointer bg-gradient-to-br from-white to-emerald-50/20">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2">
+<span class="p-1.5 bg-emerald-50 rounded-lg text-status-healthy">
+<span class="material-symbols-outlined text-[20px]" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</span>
+<span class="text-label-md font-label-md font-semibold text-on-surface">OK / Optimal</span>
+</div>
+<span class="px-2 py-0.5 bg-emerald-100/70 text-status-healthy font-semibold text-caption rounded-full">IN CADENCE</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-headline-metric font-headline-metric font-bold text-status-healthy">395</span>
+<span class="text-caption font-caption text-text-muted">SKUs balanced within SLA</span>
+</div>
+<div class="mt-3 flex items-center justify-between text-caption font-caption pt-2 border-t border-border-subtle/80">
+<span class="text-text-muted">Runway: <strong class="text-on-surface">14–35 days</strong></span>
+<span class="text-secondary font-medium hover:text-on-surface flex items-center gap-0.5">
+              Filter <span class="material-symbols-outlined text-[14px]" data-icon="arrow_forward">arrow_forward</span>
+</span>
+</div>
+</div>
+</section>
+<!-- Advanced Filtering Toolbar -->
+<section class="bg-surface-card border border-border-subtle rounded-xl p-4 shadow-sm flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-4">
+<!-- Filter Controls (Left Cluster) -->
+<div class="flex flex-wrap items-center gap-3">
+<!-- Search Input -->
+<div class="relative min-w-[320px]">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-[18px]" data-icon="search">search</span>
+<input class="w-full bg-canvas-background border border-border-subtle rounded-lg pl-9 pr-4 py-2 text-body-sm font-body-sm text-on-surface placeholder:text-text-muted focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container" placeholder="Search SKU, product name, or barcode (e.g. SKU-8841)..." type="text"/>
+</div>
+<!-- Store Location Selector Dropdown -->
+<div class="relative">
+<select class="appearance-none bg-canvas-background border border-border-subtle rounded-lg pl-3 pr-9 py-2 text-body-sm font-body-sm text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container cursor-pointer font-medium">
+<option>All Stores (4 Locations)</option>
+<option selected="">Downtown Flagship (Loc #104)</option>
+<option>Westside Pop-up (Loc #102)</option>
+<option>Uptown Market (Loc #108)</option>
+<option>E-Commerce Depot (Hub West)</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none text-[18px]" data-icon="expand_more">expand_more</span>
+</div>
+<!-- Category Selector Dropdown -->
+<div class="relative">
+<select class="appearance-none bg-canvas-background border border-border-subtle rounded-lg pl-3 pr-9 py-2 text-body-sm font-body-sm text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container cursor-pointer">
+<option selected="">All Categories: Specialty Coffee, Hardware, Syrups...</option>
+<option>Specialty Coffee &amp; Beans</option>
+<option>Brewing Hardware &amp; Filters</option>
+<option>Syrups &amp; Specialty Mixers</option>
+<option>Dairy &amp; Alternative Milks</option>
+<option>Tea &amp; Matcha</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none text-[18px]" data-icon="expand_more">expand_more</span>
+</div>
+<!-- Reset Filter Button -->
+<button class="px-3 py-2 text-label-sm font-label-sm text-secondary hover:text-on-surface hover:bg-canvas-background rounded-lg border border-transparent hover:border-border-subtle transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="filter_alt_off">filter_alt_off</span>
+<span>Reset</span>
+</button>
+</div>
+<!-- Sort & Quick Metrics (Right Cluster) -->
+<div class="flex items-center justify-between xl:justify-end gap-3 pt-3 xl:pt-0 border-t xl:border-t-0 border-border-subtle">
+<div class="flex items-center gap-2 text-caption font-caption text-text-muted">
+<span class="material-symbols-outlined text-[16px] text-primary-container" data-icon="sort">sort</span>
+<span>Sorted by:</span>
+<span class="px-2 py-1 bg-surface-container-low text-on-surface font-semibold rounded border border-border-subtle">Severity (Days of Cover ASC)</span>
+</div>
+<button class="p-2 border border-border-subtle rounded-lg text-secondary hover:bg-canvas-background hover:text-on-surface transition-colors" title="Customize Columns">
+<span class="material-symbols-outlined text-[18px]" data-icon="view_column">view_column</span>
+</button>
+</div>
+</section>
+<!-- Main Operational Inventory Table Card -->
+<section class="bg-surface-card border border-border-subtle rounded-xl shadow-sm overflow-hidden">
+<!-- Table Scroll Container -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<!-- Table Header (40px, #F8FAFC, 12px uppercase slate) -->
+<thead>
+<tr class="bg-canvas-background border-b border-border-subtle text-caption font-caption text-text-muted uppercase tracking-wider h-10 select-none">
+<th class="py-2.5 px-4 font-semibold">Store</th>
+<th class="py-2.5 px-4 font-semibold min-w-[240px]">SKU &amp; Product Name</th>
+<th class="py-2.5 px-3 font-semibold text-right">On Hand</th>
+<th class="py-2.5 px-3 font-semibold text-right">Lead Time</th>
+<th class="py-2.5 px-3 font-semibold text-right">Avg Daily</th>
+<th class="py-2.5 px-3 font-semibold text-right">Safety Stock</th>
+<th class="py-2.5 px-4 font-semibold text-right">
+<div class="inline-flex items-center justify-end gap-1 group cursor-help">
+<span>Reorder Point</span>
+<span class="material-symbols-outlined text-[15px] text-text-muted group-hover:text-primary-container" data-icon="info">info</span>
+</div>
+</th>
+<th class="py-2.5 px-4 font-semibold text-center">Days of Cover</th>
+<th class="py-2.5 px-4 font-semibold text-center">Status</th>
+<th class="py-2.5 px-4 font-semibold text-center min-w-[200px]">Suggested Replenishment</th>
+</tr>
+</thead>
+<!-- Table Body Rows -->
+<tbody class="divide-y divide-border-subtle/80 text-body-sm font-body-sm">
+<!-- ROW 1: Stockout Risk -->
+<tr class="hover:bg-canvas-background transition-colors duration-100 group">
+<td class="py-3 px-4 text-on-surface whitespace-nowrap">
+<div class="font-medium">Downtown Flagship</div>
+<div class="text-caption font-caption text-text-muted">Loc #104</div>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary text-caption font-mono font-medium">SKU-8841</span>
+<span class="font-medium text-on-surface">Single Origin Espresso (1kg)</span>
+</div>
+</td>
+<td class="py-3 px-3 text-right font-medium text-status-stockout">6 units</td>
+<td class="py-3 px-3 text-right text-text-muted">5 days</td>
+<td class="py-3 px-3 text-right text-on-surface">52 u/day</td>
+<td class="py-3 px-3 text-right text-text-muted">80 units</td>
+<td class="py-3 px-4 text-right font-medium text-on-surface">
+<div class="inline-flex items-center justify-end gap-1">
+<span>340 units</span>
+<span class="material-symbols-outlined text-[14px] text-secondary hover:text-primary-container cursor-help" data-icon="info" title="Formula: (52 u/day × 5d) + 80 = 340 ROP">info</span>
+</div>
+</td>
+<td class="py-3 px-4 text-center">
+<span class="font-bold text-status-stockout bg-red-50 px-2.5 py-1 rounded-md border border-red-200">
+                    1.8 days
+                  </span>
+</td>
+<td class="py-3 px-4 text-center whitespace-nowrap">
+<!-- Stockout Risk Badge -->
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-caption font-caption font-semibold bg-[#FEF2F2] text-[#B91C1C] border border-red-200">
+<span class="w-1.5 h-1.5 rounded-full bg-[#EF4444]"></span>
+                    Stockout Risk
+                  </span>
+</td>
+<td class="py-3 px-4 text-center">
+<div class="flex items-center justify-center gap-2">
+<span class="text-caption font-caption font-medium text-on-surface">Order 450 units</span>
+<button class="px-3 py-1.5 bg-primary-container text-on-primary rounded-lg text-caption font-label-sm font-semibold hover:bg-primary shadow-sm transition-all duration-150 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="shopping_cart">shopping_cart</span>
+<span>Draft PO</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- ROW 2: Stockout Risk -->
+<tr class="hover:bg-canvas-background transition-colors duration-100 group">
+<td class="py-3 px-4 text-on-surface whitespace-nowrap">
+<div class="font-medium">E-Commerce Depot</div>
+<div class="text-caption font-caption text-text-muted">Hub West</div>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary text-caption font-mono font-medium">SKU-3302</span>
+<span class="font-medium text-on-surface">Ceremonial Matcha Tin (100g)</span>
+</div>
+</td>
+<td class="py-3 px-3 text-right font-medium text-status-stockout">4 units</td>
+<td class="py-3 px-3 text-right text-text-muted">7 days</td>
+<td class="py-3 px-3 text-right text-on-surface">28 u/day</td>
+<td class="py-3 px-3 text-right text-text-muted">45 units</td>
+<td class="py-3 px-4 text-right font-medium text-on-surface">
+<div class="inline-flex items-center justify-end gap-1">
+<span>241 units</span>
+<span class="material-symbols-outlined text-[14px] text-secondary hover:text-primary-container cursor-help" data-icon="info" title="Formula: (28 u/day × 7d) + 45 = 241 ROP">info</span>
+</div>
+</td>
+<td class="py-3 px-4 text-center">
+<span class="font-bold text-status-stockout bg-red-50 px-2.5 py-1 rounded-md border border-red-200">
+                    1.2 days
+                  </span>
+</td>
+<td class="py-3 px-4 text-center whitespace-nowrap">
+<!-- Stockout Risk Badge -->
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-caption font-caption font-semibold bg-[#FEF2F2] text-[#B91C1C] border border-red-200">
+<span class="w-1.5 h-1.5 rounded-full bg-[#EF4444]"></span>
+                    Stockout Risk
+                  </span>
+</td>
+<td class="py-3 px-4 text-center">
+<div class="flex items-center justify-center gap-2">
+<span class="text-caption font-caption font-medium text-on-surface">Order 300 units</span>
+<button class="px-3 py-1.5 bg-primary-container text-on-primary rounded-lg text-caption font-label-sm font-semibold hover:bg-primary shadow-sm transition-all duration-150 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="shopping_cart">shopping_cart</span>
+<span>Draft PO</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- ROW 3: Reorder Now -->
+<tr class="hover:bg-canvas-background transition-colors duration-100 group">
+<td class="py-3 px-4 text-on-surface whitespace-nowrap">
+<div class="font-medium">Westside Pop-up</div>
+<div class="text-caption font-caption text-text-muted">Loc #102</div>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary text-caption font-mono font-medium">SKU-2049</span>
+<span class="font-medium text-on-surface">Ceramic Pour-Over Dripper (Matte)</span>
+</div>
+</td>
+<td class="py-3 px-3 text-right font-medium text-status-reorder">14 units</td>
+<td class="py-3 px-3 text-right text-text-muted">4 days</td>
+<td class="py-3 px-3 text-right text-on-surface">11 u/day</td>
+<td class="py-3 px-3 text-right text-text-muted">20 units</td>
+<td class="py-3 px-4 text-right font-medium text-on-surface">
+<div class="inline-flex items-center justify-end gap-1">
+<span>64 units</span>
+<span class="material-symbols-outlined text-[14px] text-secondary hover:text-primary-container cursor-help" data-icon="info" title="Formula: (11 u/day × 4d) + 20 = 64 ROP">info</span>
+</div>
+</td>
+<td class="py-3 px-4 text-center">
+<span class="font-semibold text-status-reorder bg-orange-50 px-2.5 py-1 rounded-md border border-orange-200">
+                    3.5 days
+                  </span>
+</td>
+<td class="py-3 px-4 text-center whitespace-nowrap">
+<!-- Reorder Now Badge -->
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-caption font-caption font-semibold bg-[#FFF7ED] text-[#C2410C] border border-orange-200">
+<span class="w-1.5 h-1.5 rounded-full bg-[#F97316]"></span>
+                    Reorder Now
+                  </span>
+</td>
+<td class="py-3 px-4 text-center">
+<div class="flex items-center justify-center gap-2">
+<span class="text-caption font-caption font-medium text-on-surface">Order 80 units</span>
+<button class="px-3 py-1.5 bg-surface-card border border-border-subtle text-secondary rounded-lg text-caption font-label-sm font-semibold hover:bg-canvas-background hover:text-on-surface transition-all duration-150 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="edit_note">edit_note</span>
+<span>Review PO</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- ROW 4: Reorder Now -->
+<tr class="hover:bg-canvas-background transition-colors duration-100 group">
+<td class="py-3 px-4 text-on-surface whitespace-nowrap">
+<div class="font-medium">Downtown Flagship</div>
+<div class="text-caption font-caption text-text-muted">Loc #104</div>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary text-caption font-mono font-medium">SKU-1092</span>
+<span class="font-medium text-on-surface">Unbleached Coffee Filters (Size 02)</span>
+</div>
+</td>
+<td class="py-3 px-3 text-right font-medium text-status-reorder">32 units</td>
+<td class="py-3 px-3 text-right text-text-muted">3 days</td>
+<td class="py-3 px-3 text-right text-on-surface">18 u/day</td>
+<td class="py-3 px-3 text-right text-text-muted">25 units</td>
+<td class="py-3 px-4 text-right font-medium text-on-surface">
+<div class="inline-flex items-center justify-end gap-1">
+<span>79 units</span>
+<span class="material-symbols-outlined text-[14px] text-secondary hover:text-primary-container cursor-help" data-icon="info" title="Formula: (18 u/day × 3d) + 25 = 79 ROP">info</span>
+</div>
+</td>
+<td class="py-3 px-4 text-center">
+<span class="font-semibold text-status-reorder bg-orange-50 px-2.5 py-1 rounded-md border border-orange-200">
+                    4.1 days
+                  </span>
+</td>
+<td class="py-3 px-4 text-center whitespace-nowrap">
+<!-- Reorder Now Badge -->
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-caption font-caption font-semibold bg-[#FFF7ED] text-[#C2410C] border border-orange-200">
+<span class="w-1.5 h-1.5 rounded-full bg-[#F97316]"></span>
+                    Reorder Now
+                  </span>
+</td>
+<td class="py-3 px-4 text-center">
+<div class="flex items-center justify-center gap-2">
+<span class="text-caption font-caption font-medium text-on-surface">Order 120 units</span>
+<button class="px-3 py-1.5 bg-surface-card border border-border-subtle text-secondary rounded-lg text-caption font-label-sm font-semibold hover:bg-canvas-background hover:text-on-surface transition-all duration-150 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="edit_note">edit_note</span>
+<span>Review PO</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- ROW 5: Overstock -->
+<tr class="hover:bg-canvas-background transition-colors duration-100 group">
+<td class="py-3 px-4 text-on-surface whitespace-nowrap">
+<div class="font-medium">Uptown Market</div>
+<div class="text-caption font-caption text-text-muted">Loc #108</div>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary text-caption font-mono font-medium">SKU-1192</span>
+<span class="font-medium text-on-surface">Oat Milk Barista Blend (Case of 6)</span>
+</div>
+</td>
+<td class="py-3 px-3 text-right font-medium text-status-overstock">192 units</td>
+<td class="py-3 px-3 text-right text-text-muted">2 days</td>
+<td class="py-3 px-3 text-right text-on-surface">6 u/day</td>
+<td class="py-3 px-3 text-right text-text-muted">15 units</td>
+<td class="py-3 px-4 text-right font-medium text-on-surface">
+<div class="inline-flex items-center justify-end gap-1">
+<span>27 units</span>
+<span class="material-symbols-outlined text-[14px] text-secondary hover:text-primary-container cursor-help" data-icon="info" title="Formula: (6 u/day × 2d) + 15 = 27 ROP">info</span>
+</div>
+</td>
+<td class="py-3 px-4 text-center">
+<span class="font-semibold text-status-overstock bg-purple-50 px-2.5 py-1 rounded-md border border-purple-200">
+                    74.0 days
+                  </span>
+</td>
+<td class="py-3 px-4 text-center whitespace-nowrap">
+<!-- Overstock Badge -->
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-caption font-caption font-semibold bg-[#FAF5FF] text-[#7E22CE] border border-purple-200">
+<span class="w-1.5 h-1.5 rounded-full bg-[#A855F7]"></span>
+                    Overstock
+                  </span>
+</td>
+<td class="py-3 px-4 text-center">
+<div class="flex items-center justify-center gap-2">
+<span class="text-caption font-caption font-medium text-text-muted">Hold / 0 units</span>
+<button class="px-3 py-1.5 bg-surface-card border border-status-overstock/40 text-status-overstock rounded-lg text-caption font-label-sm font-semibold hover:bg-purple-50 transition-all duration-150 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="local_offer">local_offer</span>
+<span>Create Promo</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- ROW 6: Overstock -->
+<tr class="hover:bg-canvas-background transition-colors duration-100 group">
+<td class="py-3 px-4 text-on-surface whitespace-nowrap">
+<div class="font-medium">Downtown Flagship</div>
+<div class="text-caption font-caption text-text-muted">Loc #104</div>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary text-caption font-mono font-medium">SKU-5520</span>
+<span class="font-medium text-on-surface">Organic Vanilla Bean Syrup (750ml)</span>
+</div>
+</td>
+<td class="py-3 px-3 text-right font-medium text-status-overstock">140 units</td>
+<td class="py-3 px-3 text-right text-text-muted">5 days</td>
+<td class="py-3 px-3 text-right text-on-surface">3 u/day</td>
+<td class="py-3 px-3 text-right text-text-muted">10 units</td>
+<td class="py-3 px-4 text-right font-medium text-on-surface">
+<div class="inline-flex items-center justify-end gap-1">
+<span>25 units</span>
+<span class="material-symbols-outlined text-[14px] text-secondary hover:text-primary-container cursor-help" data-icon="info" title="Formula: (3 u/day × 5d) + 10 = 25 ROP">info</span>
+</div>
+</td>
+<td class="py-3 px-4 text-center">
+<span class="font-semibold text-status-overstock bg-purple-50 px-2.5 py-1 rounded-md border border-purple-200">
+                    82.5 days
+                  </span>
+</td>
+<td class="py-3 px-4 text-center whitespace-nowrap">
+<!-- Overstock Badge -->
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-caption font-caption font-semibold bg-[#FAF5FF] text-[#7E22CE] border border-purple-200">
+<span class="w-1.5 h-1.5 rounded-full bg-[#A855F7]"></span>
+                    Overstock
+                  </span>
+</td>
+<td class="py-3 px-4 text-center">
+<div class="flex items-center justify-center gap-2">
+<span class="text-caption font-caption font-medium text-text-muted">Hold / 0 units</span>
+<button class="px-3 py-1.5 bg-surface-card border border-status-overstock/40 text-status-overstock rounded-lg text-caption font-label-sm font-semibold hover:bg-purple-50 transition-all duration-150 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="move_down">move_down</span>
+<span>Transfer SKU</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- ROW 7: Optimal / Healthy -->
+<tr class="hover:bg-canvas-background transition-colors duration-100 group">
+<td class="py-3 px-4 text-on-surface whitespace-nowrap">
+<div class="font-medium">Downtown Flagship</div>
+<div class="text-caption font-caption text-text-muted">Loc #104</div>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary text-caption font-mono font-medium">SKU-4412</span>
+<span class="font-medium text-on-surface">Cold Brew Concentrate Jug (2L)</span>
+</div>
+</td>
+<td class="py-3 px-3 text-right font-medium text-status-healthy">185 units</td>
+<td class="py-3 px-3 text-right text-text-muted">3 days</td>
+<td class="py-3 px-3 text-right text-on-surface">22 u/day</td>
+<td class="py-3 px-3 text-right text-text-muted">35 units</td>
+<td class="py-3 px-4 text-right font-medium text-on-surface">
+<div class="inline-flex items-center justify-end gap-1">
+<span>101 units</span>
+<span class="material-symbols-outlined text-[14px] text-secondary hover:text-primary-container cursor-help" data-icon="info" title="Formula: (22 u/day × 3d) + 35 = 101 ROP">info</span>
+</div>
+</td>
+<td class="py-3 px-4 text-center">
+<span class="font-semibold text-status-healthy bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">
+                    18.2 days
+                  </span>
+</td>
+<td class="py-3 px-4 text-center whitespace-nowrap">
+<!-- Optimal Badge -->
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-caption font-caption font-semibold bg-[#ECFDF5] text-[#047857] border border-emerald-200">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10B981]"></span>
+                    OK / Optimal
+                  </span>
+</td>
+<td class="py-3 px-4 text-center">
+<div class="flex items-center justify-center gap-2">
+<span class="text-caption font-caption text-text-muted">0 units (Healthy)</span>
+<span class="px-2.5 py-1 bg-surface-container-low text-text-muted rounded-md text-caption font-caption">
+                      In Cadence
+                    </span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Formula Tooltip Callout Banner & Card Footer -->
+<div class="p-4 bg-canvas-background border-t border-border-subtle flex flex-col md:flex-row items-center justify-between gap-4">
+<!-- ROP Logic Banner -->
+<div class="flex items-center gap-2 text-caption font-caption text-secondary">
+<span class="material-symbols-outlined text-[18px] text-primary-container shrink-0" data-icon="lightbulb">lightbulb</span>
+<span>
+              ShelfWise Algorithm: <strong class="text-on-surface font-mono">Reorder Point (ROP) = (Avg Daily Demand × Lead Time) + Safety Stock</strong>
+</span>
+</div>
+<!-- Bottom Pagination Controls -->
+<div class="flex flex-wrap items-center gap-4 text-caption font-caption text-text-muted">
+<!-- Row Count Selector -->
+<div class="flex items-center gap-2">
+<span>Show</span>
+<select class="bg-surface-card border border-border-subtle rounded px-2 py-1 text-on-surface text-caption font-caption focus:outline-none focus:border-primary-container">
+<option>10 / page</option>
+<option>25 / page</option>
+<option>50 / page</option>
+</select>
+</div>
+<!-- Page Record Counter -->
+<span>Showing <strong>1 to 7</strong> of <strong>420</strong> active items</span>
+<!-- Pagination Buttons -->
+<div class="inline-flex items-center gap-1">
+<button class="px-2.5 py-1 border border-border-subtle rounded text-secondary hover:bg-surface-card hover:text-on-surface disabled:opacity-40 transition-colors" disabled="">
+                Previous
+              </button>
+<button class="w-7 h-7 bg-primary-container text-on-primary font-bold rounded flex items-center justify-center">
+                1
+              </button>
+<button class="w-7 h-7 border border-border-subtle rounded hover:bg-surface-card text-on-surface flex items-center justify-center transition-colors">
+                2
+              </button>
+<button class="w-7 h-7 border border-border-subtle rounded hover:bg-surface-card text-on-surface flex items-center justify-center transition-colors">
+                3
+              </button>
+<span class="px-1 text-text-muted">...</span>
+<button class="w-7 h-7 border border-border-subtle rounded hover:bg-surface-card text-on-surface flex items-center justify-center transition-colors">
+                60
+              </button>
+<button class="px-2.5 py-1 border border-border-subtle rounded text-secondary hover:bg-surface-card hover:text-on-surface transition-colors">
+                Next
+              </button>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>

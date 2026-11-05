@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Demand Forecast &amp; Scenario Modeling - ShelfWise</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "canvas-background": "#F8FAFC",
+            "secondary": "#515f74",
+            "on-tertiary": "#ffffff",
+            "surface-bright": "#faf8ff",
+            "on-surface": "#131b2e",
+            "status-stockout": "#EF4444",
+            "on-tertiary-container": "#ffede6",
+            "surface": "#faf8ff",
+            "on-primary-fixed-variant": "#003ea8",
+            "tertiary-fixed": "#ffdbcd",
+            "primary": "#004ac6",
+            "inverse-primary": "#b4c5ff",
+            "primary-container": "#2563eb",
+            "status-healthy": "#10B981",
+            "on-tertiary-fixed": "#360f00",
+            "on-surface-variant": "#434655",
+            "text-muted": "#64748B",
+            "inverse-on-surface": "#eef0ff",
+            "on-primary-fixed": "#00174b",
+            "on-secondary-container": "#57657b",
+            "status-overstock": "#A855F7",
+            "surface-container-lowest": "#ffffff",
+            "surface-card": "#FFFFFF",
+            "border-subtle": "#E2E8F0",
+            "secondary-fixed": "#d5e3fd",
+            "tertiary-fixed-dim": "#ffb596",
+            "error": "#ba1a1a",
+            "on-error": "#ffffff",
+            "on-secondary": "#ffffff",
+            "on-secondary-fixed": "#0d1c2f",
+            "secondary-container": "#d5e3fd",
+            "on-error-container": "#93000a",
+            "background": "#faf8ff",
+            "inverse-surface": "#283044",
+            "surface-variant": "#dae2fd",
+            "error-container": "#ffdad6",
+            "tertiary": "#943700",
+            "primary-fixed": "#dbe1ff",
+            "outline": "#737686",
+            "surface-container-high": "#e2e7ff",
+            "surface-container": "#eaedff",
+            "tertiary-container": "#bc4800",
+            "on-tertiary-fixed-variant": "#7d2d00",
+            "surface-container-highest": "#dae2fd",
+            "status-reorder": "#F97316",
+            "surface-container-low": "#f2f3ff",
+            "surface-dim": "#d2d9f4",
+            "on-background": "#131b2e",
+            "secondary-fixed-dim": "#b9c7e0",
+            "outline-variant": "#c3c6d7",
+            "surface-tint": "#0053db",
+            "on-primary-container": "#eeefff",
+            "primary-fixed-dim": "#b4c5ff",
+            "on-primary": "#ffffff",
+            "on-secondary-fixed-variant": "#3a485c"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter": "1.5rem",
+            "margin": "1.5rem",
+            "space-md": "1rem",
+            "space-sm": "0.5rem",
+            "space-xl": "2rem",
+            "space-xs": "0.25rem",
+            "space-lg": "1.5rem"
+          },
+          "fontFamily": {
+            "body-md": ["Inter"],
+            "headline-metric": ["Inter"],
+            "display-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "body-sm": ["Inter"],
+            "caption": ["Inter"],
+            "headline-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "display-lg-mobile": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-sm": ["Inter"]
+          },
+          "fontSize": {
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "headline-metric": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "caption": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "display-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      line-height: 1;
+    }
+    body {
+      background-color: #F8FAFC;
+      color: #131b2e;
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-canvas-background min-h-screen text-on-surface antialiased flex">
+<!-- Desktop Persistent SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-60 z-30 bg-surface-card border-r border-border-subtle shadow-sm flex flex-col justify-between p-4">
+<!-- Brand & Navigation List -->
+<div class="flex flex-col gap-6">
+<!-- Header / Logo -->
+<div class="flex items-center gap-2.5 px-2 pt-1">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center text-on-primary shadow-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div>
+<div class="text-headline-sm font-headline-sm font-bold text-on-surface leading-tight">ShelfWise</div>
+<div class="text-caption font-caption text-text-muted">Retail Intelligence</div>
+</div>
+</div>
+<!-- Module Navigation Links -->
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 cursor-pointer" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span class="text-label-md font-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 cursor-pointer" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="cloud_upload">cloud_upload</span>
+<span class="text-label-md font-label-md">Upload</span>
+</a>
+<!-- Forecast Active Tab -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary-container text-on-primary font-medium cursor-pointer shadow-sm" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="trending_up">trending_up</span>
+<span class="text-label-md font-label-md">Forecast</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 cursor-pointer" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="inventory_2">inventory_2</span>
+<span class="text-label-md font-label-md">Inventory</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 cursor-pointer" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="smart_toy">smart_toy</span>
+<span class="text-label-md font-label-md">Assistant</span>
+</a>
+</nav>
+</div>
+<!-- Footer Controls -->
+<div class="flex flex-col gap-3 pt-4 border-t border-border-subtle">
+<!-- Storage usage block -->
+<div class="p-3 bg-surface-container-low rounded-lg border border-border-subtle">
+<div class="flex items-center justify-between text-caption font-caption text-text-muted mb-1.5">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px]" data-icon="database">database</span>
+<span>Storage: 84% Used</span>
+</div>
+<span class="font-semibold text-on-surface">4.2 / 5 GB</span>
+</div>
+<div class="w-full bg-border-subtle rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary-container h-1.5 rounded-full" style="width: 84%"></div>
+</div>
+<button class="mt-2.5 w-full py-1 text-caption font-caption text-primary hover:text-on-primary-fixed-variant font-medium text-center hover:underline transition-all">
+          Upgrade Storage
+        </button>
+</div>
+<!-- Settings Item -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-secondary hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 cursor-pointer" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+<span class="text-label-md font-label-md">Settings</span>
+</a>
+</div>
+</aside>
+<!-- Main View Container -->
+<div class="flex-1 ml-60 flex flex-col min-w-0">
+<!-- Desktop Header TopNavBar -->
+<header class="fixed top-0 right-0 left-60 h-16 z-20 bg-surface-card border-b border-border-subtle shadow-sm flex items-center justify-between px-6">
+<div class="flex items-center gap-4">
+<h1 class="text-headline-sm font-headline-sm font-bold text-on-surface tracking-tight">Demand Forecast &amp; Scenario Modeling</h1>
+<!-- AI Engine Synced Badge -->
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#ECFDF5] border border-[#A7F3D0] text-[#047857]">
+<span class="w-2 h-2 rounded-full bg-status-healthy animate-pulse"></span>
+<span class="text-caption font-caption font-semibold">AI Engine Synced</span>
+</div>
+</div>
+<!-- Right Utility Actions -->
+<div class="flex items-center gap-3">
+<!-- Quick search / command palette bar -->
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-text-muted" data-icon="search">search</span>
+<input class="w-full bg-canvas-background border border-border-subtle rounded-lg pl-9 pr-10 py-1.5 text-body-sm font-body-sm text-on-surface placeholder:text-text-muted focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all" placeholder="Search SKU, location or model..." type="text"/>
+<kbd class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] font-medium text-text-muted bg-surface-card border border-border-subtle px-1.5 py-0.5 rounded shadow-xs">⌘K</kbd>
+</div>
+<!-- Action Icons -->
+<button class="w-9 h-9 rounded-lg border border-border-subtle flex items-center justify-center text-secondary hover:bg-surface-container-low hover:text-on-surface transition-colors cursor-pointer" title="Notifications">
+<span class="material-symbols-outlined text-[20px]" data-icon="notifications">notifications</span>
+</button>
+<button class="w-9 h-9 rounded-lg border border-border-subtle flex items-center justify-center text-secondary hover:bg-surface-container-low hover:text-on-surface transition-colors cursor-pointer" title="Help &amp; Documentation">
+<span class="material-symbols-outlined text-[20px]" data-icon="help_outline">help_outline</span>
+</button>
+<!-- Divider -->
+<div class="h-6 w-px bg-border-subtle"></div>
+<!-- User Profile Pill -->
+<div class="flex items-center gap-3 pl-1">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-[#E0E7FF] text-[#3730A3] border border-[#C7D2FE] flex items-center justify-center text-label-sm font-label-sm font-semibold">
+              DW
+            </div>
+<div class="text-left hidden lg:block">
+<div class="text-body-sm font-body-sm font-medium text-on-surface leading-tight">demo@shelfwise.app</div>
+<div class="text-[11px] font-caption text-text-muted">Lead Merchandiser</div>
+</div>
+</div>
+<button class="text-caption font-caption text-text-muted hover:text-error transition-colors px-2 py-1 rounded hover:bg-[#FEF2F2]">
+            Log out
+          </button>
+</div>
+</div>
+</header>
+<!-- Main Workspace Content Canvas -->
+<main class="mt-16 p-6 flex flex-col gap-6 max-w-7xl w-full mx-auto">
+<!-- Breadcrumb & Header Controls Toolbar -->
+<section class="bg-surface-card border border-border-subtle rounded-xl p-4 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+<!-- Title & Breadcrumb Block -->
+<div>
+<div class="flex items-center gap-2 text-caption font-caption text-text-muted">
+<span>ShelfWise</span>
+<span class="material-symbols-outlined text-[13px]" data-icon="chevron_right">chevron_right</span>
+<span>Forecast Engine</span>
+<span class="material-symbols-outlined text-[13px]" data-icon="chevron_right">chevron_right</span>
+<span class="text-primary font-medium">SKU-8841</span>
+</div>
+<h2 class="text-headline-md font-headline-md font-bold text-on-surface mt-0.5">28-Day Predictive Demand Curve</h2>
+</div>
+<!-- Controls Toolbar -->
+<div class="flex flex-wrap items-center gap-2.5">
+<!-- Store Selector -->
+<div class="relative">
+<button class="h-[38px] px-3 bg-surface-card border border-border-subtle rounded-lg flex items-center gap-2 text-body-sm font-body-sm text-on-surface hover:bg-canvas-background transition-colors focus:ring-2 focus:ring-primary-container focus:outline-none">
+<span class="material-symbols-outlined text-[18px] text-text-muted" data-icon="store">store</span>
+<span class="font-medium">Downtown Flagship (Loc #104)</span>
+<span class="material-symbols-outlined text-[18px] text-text-muted" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+<!-- SKU Selector -->
+<div class="relative">
+<button class="h-[38px] px-3 bg-surface-card border border-border-subtle rounded-lg flex items-center gap-2 text-body-sm font-body-sm text-on-surface hover:bg-canvas-background transition-colors focus:ring-2 focus:ring-primary-container focus:outline-none">
+<span class="material-symbols-outlined text-[18px] text-text-muted" data-icon="inventory">inventory</span>
+<span class="font-medium">SKU-8841: Single Origin Espresso (1kg)</span>
+<span class="material-symbols-outlined text-[18px] text-text-muted" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+<!-- Status indicator chip -->
+<div class="flex items-center gap-1.5 px-3 h-[38px] bg-canvas-background border border-border-subtle rounded-lg text-text-muted text-caption font-caption">
+<span class="w-2 h-2 rounded-full bg-status-healthy"></span>
+<span>Last run: 4 mins ago · Done</span>
+</div>
+<!-- Confidence selector pill -->
+<div class="flex items-center gap-1.5 px-2.5 h-[38px] bg-surface-card border border-border-subtle rounded-lg text-body-sm font-body-sm text-on-surface">
+<span class="text-caption font-caption text-text-muted">Confidence:</span>
+<span class="font-semibold text-primary">90%</span>
+</div>
+<!-- Export CSV button -->
+<button class="h-[38px] px-3 bg-surface-card border border-border-subtle rounded-lg text-body-sm font-body-sm text-secondary hover:text-on-surface hover:bg-canvas-background transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]" data-icon="download">download</span>
+<span>Export CSV</span>
+</button>
+<!-- Primary CTA Button -->
+<button class="h-[38px] px-4 bg-primary-container hover:bg-[#1d4ed8] text-on-primary font-medium text-body-sm font-body-sm rounded-lg flex items-center gap-2 transition-all shadow-sm active:scale-98">
+<span class="material-symbols-outlined text-[18px]" data-icon="refresh">refresh</span>
+<span>Run new forecast</span>
+</button>
+</div>
+</section>
+<!-- Main Forecast Chart Card -->
+<section class="bg-surface-card border border-border-subtle rounded-xl p-5 shadow-sm flex flex-col gap-4">
+<!-- Card Header with Title, Quick KPI Chips & Legend -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-3 border-b border-border-subtle">
+<div>
+<div class="flex items-center gap-2">
+<h3 class="text-headline-sm font-headline-sm font-bold text-on-surface">Demand Projection: Historical Actuals vs 28-Day Forecast</h3>
+<span class="px-2 py-0.5 rounded-full text-[11px] font-caption font-semibold bg-[#ECFDF5] text-[#047857] border border-[#A7F3D0]">
+                High Fidelity
+              </span>
+</div>
+<p class="text-body-sm font-body-sm text-text-muted mt-0.5">
+              Projected 28d Demand: <strong class="text-on-surface font-semibold">1,420 units</strong> · Estimated inventory run-out: <span class="text-status-reorder font-semibold">18 days</span> (Safety stock threshold: 220 units)
+            </p>
+</div>
+<!-- Interactive Legend -->
+<div class="flex flex-wrap items-center gap-4 text-caption font-caption">
+<div class="flex items-center gap-2">
+<span class="w-3.5 h-1 bg-[#1E293B] rounded-full inline-block"></span>
+<span class="text-on-surface font-medium">Actual Daily Sales</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3.5 h-1.5 bg-[#2563EB] rounded-full inline-block"></span>
+<span class="text-on-surface font-medium">AI Forecast (LightGBM)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3.5 h-2.5 bg-[#DBEAFE] border border-[#93C5FD] rounded-xs inline-block"></span>
+<span class="text-secondary font-medium">90% Confidence Interval</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3.5 border-t border-dashed border-[#EF4444] inline-block"></span>
+<span class="text-status-stockout font-medium">Cutoff / Today</span>
+</div>
+</div>
+</div>
+<!-- SVG Forecast Chart Canvas -->
+<div class="w-full relative h-[360px] bg-[#FAFCFF] rounded-lg border border-border-subtle overflow-hidden p-2">
+<svg class="w-full h-full select-none" preserveaspectratio="none" viewbox="0 0 1000 340">
+<defs>
+<!-- Gradient for Confidence Interval -->
+<lineargradient id="bandGrad" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" stop-color="#93C5FD" stop-opacity="0.35"></stop>
+<stop offset="100%" stop-color="#BFDBFE" stop-opacity="0.45"></stop>
+</lineargradient>
+<!-- Subtle forecast under-area fill -->
+<lineargradient id="forecastFill" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#2563EB" stop-opacity="0.12"></stop>
+<stop offset="100%" stop-color="#2563EB" stop-opacity="0.00"></stop>
+</lineargradient>
+<pattern height="40" id="gridPattern" patternunits="userSpaceOnUse" width="70">
+<line stroke="#E2E8F0" stroke-dasharray="2,2" stroke-width="0.75" x1="0" x2="70" y1="40" y2="40"></line>
+</pattern>
+</defs>
+<!-- Background Grid -->
+<rect fill="url(#gridPattern)" height="300" width="1000"></rect>
+<!-- Y Axis Guideline markers -->
+<text fill="#94A3B8" font-family="Inter" font-size="11" text-anchor="end" x="35" y="45">80 u</text>
+<text fill="#94A3B8" font-family="Inter" font-size="11" text-anchor="end" x="35" y="105">60 u</text>
+<text fill="#94A3B8" font-family="Inter" font-size="11" text-anchor="end" x="35" y="165">40 u</text>
+<text fill="#94A3B8" font-family="Inter" font-size="11" text-anchor="end" x="35" y="225">20 u</text>
+<text fill="#94A3B8" font-family="Inter" font-size="11" text-anchor="end" x="35" y="285">0 u</text>
+<!-- Bottom Baseline -->
+<line stroke="#CBD5E1" stroke-width="1" x1="45" x2="980" y1="285" y2="285"></line>
+<!-- Historical Background Tint (Left side) -->
+<rect fill="#F1F5F9" fill-opacity="0.45" height="265" width="375" x="45" y="20"></rect>
+<text fill="#64748B" font-family="Inter" font-size="11" font-weight="600" x="55" y="38">PAST 14 DAYS (ACTUAL OBSERVED)</text>
+<!-- Forecast Horizon Background (Right side) -->
+<text fill="#2563EB" font-family="Inter" font-size="11" font-weight="600" x="435" y="38">FUTURE 28 DAYS (AI PREDICTIVE HORIZON)</text>
+<!-- Confidence Interval Area (Upper & Lower Bounds widening over time) -->
+<!-- Cutoff starts at x=420. Forecast path from x=420 to x=970 -->
+<path d="M 420 178 
+                     C 470 160, 520 180, 570 145
+                     C 620 120, 670 150, 720 125
+                     C 770 100, 820 130, 870 95
+                     C 920 80, 950 90, 970 85
+                     L 970 245
+                     C 950 240, 920 230, 870 215
+                     C 820 235, 770 205, 720 210
+                     C 670 220, 620 195, 570 205
+                     C 520 215, 470 200, 420 182
+                     Z" fill="url(#bandGrad)" stroke="#93C5FD" stroke-dasharray="3,3" stroke-width="1"></path>
+<!-- Forecast Area Gradient Fill under central curve -->
+<path d="M 420 180
+                     C 470 170, 520 190, 570 165
+                     C 620 145, 670 170, 720 150
+                     C 770 130, 820 160, 870 135
+                     C 920 120, 950 135, 970 130
+                     L 970 285 L 420 285 Z" fill="url(#forecastFill)"></path>
+<!-- Historical Actual Sales Line (Dark Slate) -->
+<path d="M 55 190
+                     L 85 175
+                     L 115 195
+                     L 145 160
+                     L 175 168
+                     L 205 130
+                     L 235 145
+                     L 265 185
+                     L 295 155
+                     L 325 140
+                     L 355 170
+                     L 385 150
+                     L 420 180" fill="none" stroke="#1E293B" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+<!-- Historical Data Points -->
+<circle cx="145" cy="160" fill="#1E293B" r="3.5"></circle>
+<circle cx="205" cy="130" fill="#1E293B" r="3.5"></circle>
+<circle cx="265" cy="185" fill="#1E293B" r="3.5"></circle>
+<circle cx="325" cy="140" fill="#1E293B" r="3.5"></circle>
+<circle cx="385" cy="150" fill="#1E293B" r="3.5"></circle>
+<circle cx="420" cy="180" fill="#1E293B" r="4.5" stroke="#FFFFFF" stroke-width="2"></circle>
+<!-- Predictive Forecast Line (Vibrant Blue #2563EB) -->
+<path d="M 420 180
+                     C 470 170, 520 190, 570 165
+                     C 620 145, 670 170, 720 150
+                     C 770 130, 820 160, 870 135
+                     C 920 120, 950 135, 970 130" fill="none" stroke="#2563EB" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+<!-- Forecast Milestone Points -->
+<circle cx="570" cy="165" fill="#2563EB" r="4" stroke="#FFFFFF" stroke-width="2"></circle>
+<circle cx="720" cy="150" fill="#2563EB" r="4" stroke="#FFFFFF" stroke-width="2"></circle>
+<circle cx="870" cy="135" fill="#2563EB" r="4" stroke="#FFFFFF" stroke-width="2"></circle>
+<!-- Promoted Day Marker (Annotation) -->
+<g transform="translate(720, 115)">
+<rect fill="#1E293B" height="20" rx="4" width="90" x="-45" y="-22"></rect>
+<text fill="#FFFFFF" font-family="Inter" font-size="10" font-weight="600" text-anchor="middle" x="0" y="-8">Promo Spike: 68u</text>
+<line stroke="#1E293B" stroke-dasharray="2,2" stroke-width="1.5" x1="0" x2="0" y1="-2" y2="35"></line>
+</g>
+<!-- Stockout Warning Marker Line (Day 18 of forecast -> around x=770) -->
+<line stroke="#F97316" stroke-dasharray="4,4" stroke-width="1.5" x1="770" x2="770" y1="50" y2="285"></line>
+<g transform="translate(770, 60)">
+<rect fill="#FFF7ED" height="22" rx="4" stroke="#FDBA74" stroke-width="1" width="130" x="-65" y="-12"></rect>
+<text fill="#C2410C" font-family="Inter" font-size="10" font-weight="600" text-anchor="middle" x="0" y="3">Stockout Alert: Day 18</text>
+</g>
+<!-- Forecast Horizon Cutoff Vertical Mark -->
+<line stroke="#EF4444" stroke-dasharray="4,4" stroke-width="2" x1="420" x2="420" y1="20" y2="285"></line>
+<g transform="translate(420, 298)">
+<rect fill="#FEF2F2" height="20" rx="4" stroke="#FCA5A5" stroke-width="1" width="120" x="-60" y="0"></rect>
+<text fill="#B91C1C" font-family="Inter" font-size="10" font-weight="700" text-anchor="middle" x="0" y="14">TODAY (CUTOFF)</text>
+</g>
+<!-- Timeline Date Labels -->
+<text fill="#64748B" font-family="Inter" font-size="11" x="55" y="318">May 06</text>
+<text fill="#64748B" font-family="Inter" font-size="11" x="145" y="318">May 09</text>
+<text fill="#64748B" font-family="Inter" font-size="11" x="235" y="318">May 12</text>
+<text fill="#64748B" font-family="Inter" font-size="11" x="325" y="318">May 16</text>
+<text fill="#0F172A" font-family="Inter" font-size="11" font-weight="700" text-anchor="middle" x="420" y="328">May 20</text>
+<text fill="#2563EB" font-family="Inter" font-size="11" x="550" y="318">May 25</text>
+<text fill="#2563EB" font-family="Inter" font-size="11" x="680" y="318">Jun 01</text>
+<text fill="#2563EB" font-family="Inter" font-size="11" x="810" y="318">Jun 08</text>
+<text fill="#2563EB" font-family="Inter" font-size="11" x="940" y="318">Jun 17</text>
+</svg>
+</div>
+<!-- Chart Quick Action Footnote -->
+<div class="flex items-center justify-between text-caption font-caption text-text-muted px-1">
+<div class="flex items-center gap-4">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-primary" data-icon="info">info</span>
+              Model trained on 730 days of sales history, local holiday calendars, and temperature indices.
+            </span>
+</div>
+<div class="flex items-center gap-3">
+<button class="hover:text-on-surface font-medium hover:underline flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="tune">tune</span>
+              Adjust Regressors
+            </button>
+<button class="hover:text-on-surface font-medium hover:underline flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="fullscreen">fullscreen</span>
+              Expand View
+            </button>
+</div>
+</div>
+</section>
+<!-- Model Comparison Metric Cards (Row of 3 Cards) -->
+<section class="flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<h3 class="text-headline-sm font-headline-sm font-bold text-on-surface">Model Performance Benchmark</h3>
+<span class="text-caption font-caption text-text-muted">(Cross-validation on holdout 28-day window)</span>
+</div>
+<span class="text-caption font-caption text-text-muted">Target: Weighted Absolute Percentage Error (WAPE) minimization</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+<!-- Card 1: Naive (Baseline) -->
+<div class="bg-surface-card border border-border-subtle rounded-xl p-5 shadow-sm flex flex-col justify-between transition-all hover:border-slate-300">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="text-label-md font-label-md font-semibold text-on-surface">Naive (Baseline)</span>
+<span class="px-2 py-0.5 rounded-full text-caption font-caption bg-surface-container-low text-secondary border border-border-subtle">
+                  Standard Flat
+                </span>
+</div>
+<p class="text-caption font-caption text-text-muted mb-4">
+                Carries forward last observed period sales without seasonality adjustment.
+              </p>
+<!-- Metrics -->
+<div class="grid grid-cols-3 gap-2 py-3 border-y border-border-subtle mb-3 text-center">
+<div>
+<div class="text-caption font-caption text-text-muted">WAPE</div>
+<div class="text-headline-sm font-headline-sm font-bold text-error">22.4%</div>
+</div>
+<div>
+<div class="text-caption font-caption text-text-muted">Bias</div>
+<div class="text-headline-sm font-headline-sm font-bold text-on-surface">+4.2%</div>
+</div>
+<div>
+<div class="text-caption font-caption text-text-muted">RMSSE</div>
+<div class="text-headline-sm font-headline-sm font-bold text-on-surface">1.48</div>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between text-caption font-caption text-text-muted pt-1">
+<span>Status: Dormant</span>
+<button class="text-primary hover:underline font-medium">View weights</button>
+</div>
+</div>
+<!-- Card 2: Seasonal Naive (28d) -->
+<div class="bg-surface-card border border-border-subtle rounded-xl p-5 shadow-sm flex flex-col justify-between transition-all hover:border-slate-300">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="text-label-md font-label-md font-semibold text-on-surface">Seasonal Naive (28d)</span>
+<span class="px-2 py-0.5 rounded-full text-caption font-caption bg-surface-container-low text-secondary border border-border-subtle">
+                  Periodic
+                </span>
+</div>
+<p class="text-caption font-caption text-text-muted mb-4">
+                28-day cyclical day-of-week seasonality matching previous monthly patterns.
+              </p>
+<!-- Metrics -->
+<div class="grid grid-cols-3 gap-2 py-3 border-y border-border-subtle mb-3 text-center">
+<div>
+<div class="text-caption font-caption text-text-muted">WAPE</div>
+<div class="text-headline-sm font-headline-sm font-bold text-status-reorder">14.6%</div>
+</div>
+<div>
+<div class="text-caption font-caption text-text-muted">Bias</div>
+<div class="text-headline-sm font-headline-sm font-bold text-on-surface">-1.1%</div>
+</div>
+<div>
+<div class="text-caption font-caption text-text-muted">RMSSE</div>
+<div class="text-headline-sm font-headline-sm font-bold text-on-surface">1.18</div>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between text-caption font-caption text-text-muted pt-1">
+<span>Status: Fallback</span>
+<button class="text-primary hover:underline font-medium">View weights</button>
+</div>
+</div>
+<!-- Card 3: LightGBM (BEST MODEL) -->
+<div class="bg-surface-card border-2 border-primary-container rounded-xl p-5 shadow-md flex flex-col justify-between relative overflow-hidden bg-gradient-to-b from-[#FFFFFF] to-[#F8FAFF]">
+<!-- Top badge banner -->
+<div class="absolute top-0 right-0 bg-primary-container text-on-primary text-[10px] font-bold px-3 py-0.5 rounded-bl-lg tracking-wide uppercase">
+              Selected by AI
+            </div>
+<div>
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2">
+<span class="text-label-md font-label-md font-bold text-on-surface">LightGBM</span>
+<span class="flex items-center gap-1 px-2 py-0.5 rounded-full text-caption font-caption bg-[#ECFDF5] text-[#047857] border border-[#A7F3D0] font-semibold">
+<span class="material-symbols-outlined text-[13px]" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                    Best Model / Active
+                  </span>
+</div>
+</div>
+<p class="text-caption font-caption text-text-muted mb-4">
+                Gradient boosting with promotional, weather, and foot traffic regressors.
+              </p>
+<!-- Metrics (Highlighted) -->
+<div class="grid grid-cols-3 gap-2 py-3 border-y border-border-subtle mb-3 text-center bg-[#F1F5F9]/50 rounded-lg">
+<div>
+<div class="text-caption font-caption text-text-muted font-medium">WAPE</div>
+<div class="text-headline-sm font-headline-sm font-bold text-status-healthy">8.8%</div>
+</div>
+<div>
+<div class="text-caption font-caption text-text-muted font-medium">Bias</div>
+<div class="text-headline-sm font-headline-sm font-bold text-on-surface">+0.2%</div>
+</div>
+<div>
+<div class="text-caption font-caption text-text-muted font-medium">RMSSE</div>
+<div class="text-headline-sm font-headline-sm font-bold text-primary">0.84</div>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between text-caption font-caption text-text-muted pt-1">
+<span class="text-status-healthy font-semibold flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-status-healthy"></span>
+                In Production
+              </span>
+<button class="text-primary font-semibold hover:underline flex items-center gap-0.5">
+                Model Diagnostics
+                <span class="material-symbols-outlined text-[14px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- 'Next 28 Days' Data Table Card -->
+<section class="bg-surface-card border border-border-subtle rounded-xl shadow-sm overflow-hidden mb-8">
+<!-- Table Card Header -->
+<div class="px-5 py-4 border-b border-border-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div>
+<h3 class="text-headline-sm font-headline-sm font-bold text-on-surface">Next 28 Days Projection Table</h3>
+<p class="text-caption font-caption text-text-muted">Granular daily forecast quantities, confidence envelopes, and operational flags</p>
+</div>
+<div class="flex items-center gap-2">
+<!-- Filter Search -->
+<div class="relative w-48 sm:w-56">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-[16px] text-text-muted" data-icon="search">search</span>
+<input class="w-full bg-canvas-background border border-border-subtle rounded-lg pl-8 pr-3 py-1.5 text-body-sm font-body-sm text-on-surface placeholder:text-text-muted focus:outline-none focus:border-primary-container" placeholder="Filter dates..." type="text"/>
+</div>
+<button class="h-[34px] px-3 bg-surface-card border border-border-subtle rounded-lg text-body-sm font-body-sm text-secondary hover:text-on-surface hover:bg-canvas-background transition-colors flex items-center gap-1.5 font-medium">
+<span class="material-symbols-outlined text-[16px]" data-icon="file_download">file_download</span>
+<span>Download table</span>
+</button>
+</div>
+</div>
+<!-- Table Component -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="h-10 bg-canvas-background border-b border-border-subtle text-[12px] uppercase font-semibold text-text-muted tracking-wider">
+<th class="px-5 py-2 font-medium">Date</th>
+<th class="px-5 py-2 font-medium text-right">Forecast (p50)</th>
+<th class="px-5 py-2 font-medium text-right">Lower Bound (p05)</th>
+<th class="px-5 py-2 font-medium text-right">Upper Bound (p95)</th>
+<th class="px-5 py-2 font-medium text-center">Status / Scenario Flag</th>
+<th class="px-5 py-2 font-medium text-right">Suggested Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#F1F5F9] text-body-sm font-body-sm">
+<!-- Row 1 -->
+<tr class="h-[52px] hover:bg-canvas-background transition-colors">
+<td class="px-5 py-3 font-medium text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-text-muted" data-icon="calendar_today">calendar_today</span>
+<span>May 20, 2024 (Mon)</span>
+<span class="text-caption font-caption bg-surface-container text-on-surface px-1.5 py-0.5 rounded">Today</span>
+</td>
+<td class="px-5 py-3 text-right font-semibold text-primary">52 units</td>
+<td class="px-5 py-3 text-right text-text-muted">44 units</td>
+<td class="px-5 py-3 text-right text-text-muted">61 units</td>
+<td class="px-5 py-3 text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-caption font-caption bg-[#ECFDF5] text-[#047857]">
+<span class="w-1.5 h-1.5 rounded-full bg-status-healthy mr-1.5"></span>
+                    Normal Demand
+                  </span>
+</td>
+<td class="px-5 py-3 text-right text-text-muted">No change</td>
+</tr>
+<!-- Row 2 -->
+<tr class="h-[52px] hover:bg-canvas-background transition-colors">
+<td class="px-5 py-3 font-medium text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-text-muted" data-icon="calendar_today">calendar_today</span>
+<span>May 21, 2024 (Tue)</span>
+</td>
+<td class="px-5 py-3 text-right font-semibold text-primary">48 units</td>
+<td class="px-5 py-3 text-right text-text-muted">40 units</td>
+<td class="px-5 py-3 text-right text-text-muted">57 units</td>
+<td class="px-5 py-3 text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-caption font-caption bg-[#ECFDF5] text-[#047857]">
+<span class="w-1.5 h-1.5 rounded-full bg-status-healthy mr-1.5"></span>
+                    Normal Demand
+                  </span>
+</td>
+<td class="px-5 py-3 text-right text-text-muted">No change</td>
+</tr>
+<!-- Row 3 -->
+<tr class="h-[52px] hover:bg-canvas-background transition-colors">
+<td class="px-5 py-3 font-medium text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-text-muted" data-icon="calendar_today">calendar_today</span>
+<span>May 22, 2024 (Wed)</span>
+</td>
+<td class="px-5 py-3 text-right font-semibold text-primary">54 units</td>
+<td class="px-5 py-3 text-right text-text-muted">46 units</td>
+<td class="px-5 py-3 text-right text-text-muted">63 units</td>
+<td class="px-5 py-3 text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-caption font-caption bg-[#ECFDF5] text-[#047857]">
+<span class="w-1.5 h-1.5 rounded-full bg-status-healthy mr-1.5"></span>
+                    Normal Demand
+                  </span>
+</td>
+<td class="px-5 py-3 text-right text-text-muted">No change</td>
+</tr>
+<!-- Row 4 -->
+<tr class="h-[52px] hover:bg-canvas-background transition-colors">
+<td class="px-5 py-3 font-medium text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-text-muted" data-icon="calendar_today">calendar_today</span>
+<span>May 23, 2024 (Thu)</span>
+</td>
+<td class="px-5 py-3 text-right font-semibold text-primary">58 units</td>
+<td class="px-5 py-3 text-right text-text-muted">49 units</td>
+<td class="px-5 py-3 text-right text-text-muted">68 units</td>
+<td class="px-5 py-3 text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-caption font-caption bg-[#ECFDF5] text-[#047857]">
+<span class="w-1.5 h-1.5 rounded-full bg-status-healthy mr-1.5"></span>
+                    Normal Demand
+                  </span>
+</td>
+<td class="px-5 py-3 text-right text-text-muted">No change</td>
+</tr>
+<!-- Row 5 (Promo Spike) -->
+<tr class="h-[52px] bg-[#EFF6FF]/40 hover:bg-[#EFF6FF]/70 transition-colors">
+<td class="px-5 py-3 font-semibold text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary" data-icon="campaign">campaign</span>
+<span>May 24, 2024 (Fri)</span>
+</td>
+<td class="px-5 py-3 text-right font-bold text-primary">68 units</td>
+<td class="px-5 py-3 text-right text-on-surface font-medium">58 units</td>
+<td class="px-5 py-3 text-right text-on-surface font-medium">81 units</td>
+<td class="px-5 py-3 text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-caption font-caption bg-[#FFF7ED] text-[#C2410C] font-semibold border border-[#FFEDD5]">
+<span class="w-1.5 h-1.5 rounded-full bg-status-reorder mr-1.5"></span>
+                    Expected Promo Surge
+                  </span>
+</td>
+<td class="px-5 py-3 text-right text-primary font-medium hover:underline cursor-pointer">
+                  Stage +15 Units
+                </td>
+</tr>
+<!-- Row 6 -->
+<tr class="h-[52px] hover:bg-canvas-background transition-colors">
+<td class="px-5 py-3 font-medium text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-text-muted" data-icon="calendar_today">calendar_today</span>
+<span>May 25, 2024 (Sat)</span>
+</td>
+<td class="px-5 py-3 text-right font-semibold text-primary">65 units</td>
+<td class="px-5 py-3 text-right text-text-muted">55 units</td>
+<td class="px-5 py-3 text-right text-text-muted">76 units</td>
+<td class="px-5 py-3 text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-caption font-caption bg-[#FAF5FF] text-[#7E22CE]">
+<span class="w-1.5 h-1.5 rounded-full bg-status-overstock mr-1.5"></span>
+                    Weekend Foot Traffic
+                  </span>
+</td>
+<td class="px-5 py-3 text-right text-text-muted">No change</td>
+</tr>
+<!-- Row 7 -->
+<tr class="h-[52px] hover:bg-canvas-background transition-colors">
+<td class="px-5 py-3 font-medium text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-text-muted" data-icon="calendar_today">calendar_today</span>
+<span>May 26, 2024 (Sun)</span>
+</td>
+<td class="px-5 py-3 text-right font-semibold text-primary">61 units</td>
+<td class="px-5 py-3 text-right text-text-muted">51 units</td>
+<td class="px-5 py-3 text-right text-text-muted">73 units</td>
+<td class="px-5 py-3 text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-caption font-caption bg-[#FAF5FF] text-[#7E22CE]">
+<span class="w-1.5 h-1.5 rounded-full bg-status-overstock mr-1.5"></span>
+                    Weekend Foot Traffic
+                  </span>
+</td>
+<td class="px-5 py-3 text-right text-text-muted">No change</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Summary & Pagination Footer -->
+<div class="px-5 py-3.5 bg-canvas-background border-t border-border-subtle flex flex-col sm:flex-row items-center justify-between text-caption font-caption text-text-muted gap-2">
+<div>
+            Showing next <strong>7</strong> of <strong>28</strong> projected days · Full series available in export
+          </div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1 bg-surface-card border border-border-subtle rounded text-on-surface hover:bg-slate-100 disabled:opacity-50" disabled="">
+              Previous 7 Days
+            </button>
+<span class="px-2 font-medium text-on-surface">Page 1 of 4</span>
+<button class="px-3 py-1 bg-surface-card border border-border-subtle rounded text-on-surface hover:bg-slate-100 font-medium">
+              Next 7 Days
+            </button>
+</div>
+</div>
+</section>
+</main>
+</div>
+</body></html>
