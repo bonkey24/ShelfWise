@@ -1,6 +1,6 @@
 # ShelfWise
 
-[![CI](https://github.com/YOUR_USER/YOUR_REPO/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR_USER/YOUR_REPO/actions/workflows/ci.yml)
+[![CI](https://github.com/bonkey24/ShelfWise/actions/workflows/ci.yml/badge.svg)](https://github.com/bonkey24/ShelfWise/actions/workflows/ci.yml)
 
 > **Know what to stock, before the shelf runs empty.**
 
@@ -8,7 +8,7 @@ ShelfWise is a retail demand forecasting web application that helps store manage
 
 ---
 
-## ✨ Planned Features
+## ✨ Features
 
 - 📂 **CSV Upload with Validation** — Upload historical sales data with automatic schema validation and error reporting
 - 📈 **LightGBM Forecasts with Baseline Comparison** — ML-powered demand forecasts always benchmarked against a naive baseline (metrics: WAPE, bias, RMSSE)
@@ -34,9 +34,9 @@ ShelfWise is a retail demand forecasting web application that helps store manage
 |---|---|
 | Backend API | Django 5, Django REST Framework, drf-spectacular |
 | Database | PostgreSQL 16 |
-| Task Queue | Celery + Redis 7 |
+| Background jobs | Python threads (no Celery) |
 | ML / Forecasting | Python, Pandas, LightGBM, scikit-learn |
-| Frontend (planned) | React, TypeScript, Vite, Tailwind CSS |
+| Frontend | React, TypeScript, Vite, Tailwind CSS |
 | Auth | OIDC / SSO |
 
 ---
@@ -55,9 +55,9 @@ Developed with AI-assisted coding (Claude, Antigravity). UI mockups from Google 
 |---|---|---|
 | **Frontend Web App** | [http://localhost:5173](http://localhost:5173) | Vite dev server / Nginx container |
 | **Backend API** | [http://localhost:8000](http://localhost:8000) | Django REST Framework API |
-| **Swagger / OpenAPI** | [http://localhost:8000/api/schema/swagger-ui/](http://localhost:8000/api/schema/swagger-ui/) | Interactive API documentation |
+| **Swagger / OpenAPI** | [http://localhost:8000/api/docs/](http://localhost:8000/api/docs/) | Interactive API documentation |
 | **PostgreSQL Database** | `localhost:5433` | Host port 5433 mapped to avoid local 5432 conflict |
-| **Redis Cache / Queue** | `localhost:6379` | Celery broker & Redis cache |
+| **Redis** | `localhost:6379` | Provisioned in Docker, not used by the app at runtime |
 | **Demo User** | `demo@shelfwise.app` | Password: `Demo@12345` |
 
 ---
@@ -180,7 +180,7 @@ ShelfWise is configured for cloud deployment with a containerized Django backend
 2. **Create a Web Service on Render**:
    - Connect your GitHub repository.
    - Choose **Docker** as the Environment / Runtime.
-   - Set **Docker Context** to `./backend` and **Dockerfile Path** to `./backend/Dockerfile`.
+   - Set **Root Directory** to `backend` and **Dockerfile Path** to `Dockerfile`.
    - Set the instance type (Free tier or higher).
 
 3. **Configure Environment Variables on Render**:
@@ -188,6 +188,7 @@ ShelfWise is configured for cloud deployment with a containerized Django backend
    - `DJANGO_DEBUG` (`False`)
    - `ALLOWED_HOSTS` (e.g. `your-app-name.onrender.com`)
    - `FRONTEND_URL` (e.g. `https://your-frontend.vercel.app`)
+   - `EXTRA_ORIGINS` (optional: comma-separated extra allowed origins)
    - `DB_HOST`
    - `DB_PORT`
    - `DB_NAME`
