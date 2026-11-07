@@ -75,14 +75,19 @@ Developed with AI-assisted coding (Claude, Antigravity). UI mockups from Google 
 
 ### Configuration & Environment Variables
 
-Copy the example environment configuration into `backend\.env`:
+Copy the example environment configuration into `backend\.env` and `frontend\.env`:
 
 ```powershell
+# Copy backend environment configuration
 Copy-Item .env.example backend\.env
+
+# Copy frontend environment configuration
+Copy-Item frontend\.env.example frontend\.env
 ```
 
-Key environment settings in `backend\.env`:
-- **Database & Cache**: Pre-configured for local Docker backing services (`DB_PORT=5433`, `REDIS_URL=redis://localhost:6379/0`).
+Key environment settings:
+- **Database & Cache (`backend\.env`)**: Pre-configured for local Docker backing services (`DB_PORT=5433`, `REDIS_URL=redis://localhost:6379/0`).
+- **Frontend Settings (`frontend\.env`)**: Pre-configured for local development (`VITE_API_URL=http://localhost:8000/api`, `VITE_SHOW_DEMO_LOGIN=true` enabling one-click demo credentials).
 - **Google SSO Login (OIDC)**:
   ```env
   OIDC_ISSUER=https://accounts.google.com
@@ -158,6 +163,7 @@ python backend\manage.py runserver 8000
 In a separate PowerShell terminal:
 ```powershell
 cd frontend
+Copy-Item .env.example .env
 npm install
 npm run dev
 ```
