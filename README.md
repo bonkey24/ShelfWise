@@ -4,7 +4,18 @@
 
 > **Know what to stock, before the shelf runs empty.**
 
+Watch the demo: https://youtu.be/tr1qxtZYlLM
+
 ShelfWise is a retail demand forecasting web application that helps store managers and analysts predict future product demand, optimize inventory levels, and avoid costly stockouts or overstock situations.
+
+## Live Demo
+
+- **Demo video (YouTube):** https://youtu.be/tr1qxtZYlLM
+- **Live app:** https://shelf-wise-seven.vercel.app/
+- **API:** https://shelfwise-2aol.onrender.com
+- **Demo login:** `demo@shelfwise.app` / `Demo@12345` (demo account only)
+
+> The backend runs on a free Render instance, so the first request after a period of inactivity can take about a minute. Sales data is adapted from Rossmann; SKUs, prices and stock levels are simulated.
 
 ---
 
@@ -225,13 +236,7 @@ ShelfWise is configured for cloud deployment with a containerized Django backend
 3. **Finalize CORS**:
    - Ensure the Vercel production domain is configured as `FRONTEND_URL` in the Render backend settings.
 
-## Live Demo
-
-- **App:** https://shelf-wise-seven.vercel.app/
-- **API:** https://shelfwise-2aol.onrender.com
-- **Demo login:** `demo@shelfwise.app` / `Demo@12345` (demo account only)
-
-> The backend runs on a free Render instance, so the first request after a period of inactivity can take about a minute. Sales data is adapted from Rossmann; SKUs, prices and stock levels are simulated.
+---
 
 ## Screenshots
 
