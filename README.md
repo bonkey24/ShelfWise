@@ -225,3 +225,19 @@ ShelfWise is configured for cloud deployment with a containerized Django backend
 3. **Finalize CORS**:
    - Ensure the Vercel production domain is configured as `FRONTEND_URL` in the Render backend settings.
 
+## Live Demo
+
+- **App:** https://shelf-wise-seven.vercel.app/
+- **API:** https://shelfwise-2aol.onrender.com
+- **Demo login:** `demo@shelfwise.app` / `Demo@12345` (demo account only)
+
+> The backend runs on a free Render instance, so the first request after a period of inactivity can take about a minute. Sales data is adapted from Rossmann; SKUs, prices and stock levels are simulated.
+
+## Screenshots
+
+| | |
+|---|---|
+| ![Login](docs/screenshots/01-login.png) | ![Dashboard](docs/screenshots/02-dashboard.png) |
+| ![Upload](docs/screenshots/04-upload.png) | ![Forecast](docs/screenshots/05-forecast-chart.png) |
+| ![Model metrics](docs/screenshots/06-forecast-metrics.png) | ![Inventory](docs/screenshots/07-inventory.png) |
+| ![Assistant](docs/screenshots/08-assistant.png) | |
